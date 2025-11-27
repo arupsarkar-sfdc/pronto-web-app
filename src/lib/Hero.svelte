@@ -1,13 +1,21 @@
 <script>
     import { createEventDispatcher } from "svelte";
+
     const dispatch = createEventDispatcher();
 
-    // Hero logic
     const categories = [
-        { name: "Meat", icon: "🍖" },
-        { name: "Fast Food", icon: "🍔" },
+        { name: "Deals", icon: "🏷️" },
+        { name: "Grocery", icon: "🥦" },
+        { name: "Convenience", icon: "🏪" },
+        { name: "Pizza", icon: "🍕" },
+        { name: "American", icon: "🍔" },
+        { name: "Mexican", icon: "🌮" },
         { name: "Sushi", icon: "🍣" },
+        { name: "Asian", icon: "🍜" },
+        { name: "Fast Food", icon: "🍟" },
+        { name: "Dessert", icon: "🍦" },
         { name: "Drinks", icon: "🥤" },
+        { name: "Coffee", icon: "☕" },
     ];
 
     function handleCategoryClick(category) {
@@ -15,147 +23,193 @@
     }
 </script>
 
-<section class="hero">
-    <div class="categories">
-        {#each categories as category}
-            <button
-                class="category-btn"
-                on:click={() => handleCategoryClick(category)}
-            >
-                <span class="icon">{category.icon}</span>
-                <span class="label">{category.name}</span>
-            </button>
-        {/each}
+<section class="hero-container">
+    <!-- Category Pills Navigation -->
+    <div class="category-section">
+        <h2>Categories</h2>
+        <div class="category-nav">
+            {#each categories as category}
+                <button
+                    class="category-pill"
+                    on:click={() => handleCategoryClick(category)}
+                >
+                    <span class="icon">{category.icon}</span>
+                    <span class="label">{category.name}</span>
+                </button>
+            {/each}
+        </div>
     </div>
 
-    <div class="hero-content">
-        <div class="text-content">
-            <span class="offer">New Year Offer</span>
-            <h1>30% OFF</h1>
-            <p class="date">16 - 31 Dec</p>
-            <button class="cta-btn">Get Now</button>
+    <!-- Promotional Banner -->
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Crave it? Get it.</h1>
+            <p>Free delivery on your first order.</p>
+            <button class="cta-btn">Order Now</button>
         </div>
-        <div class="image-content">
-            <!-- Placeholder for pizza image from design -->
-            <div class="pizza-slice">🍕</div>
+        <div class="banner-image">
+            <!-- Placeholder for a delicious food image -->
+            <div class="food-emoji">🍕🥗🍔</div>
         </div>
     </div>
 </section>
 
 <style>
-    .hero {
-        padding: 0 20px; /* Removed top/bottom padding to let margins handle it */
-        margin-bottom: 30px;
+    .hero-container {
+        margin-bottom: 40px;
     }
 
-    /* Categories Styles */
-    .categories {
+    .category-section {
+        margin-bottom: 24px;
+    }
+
+    .category-section h2 {
+        font-size: 24px;
+        color: var(--secondary-color);
+        margin-bottom: 16px;
+    }
+
+    /* Category Navigation */
+    .category-nav {
         display: flex;
-        justify-content: space-between;
-        gap: 15px;
-        margin-bottom: 25px;
+        gap: 12px;
         overflow-x: auto;
-        padding-bottom: 5px; /* For scrollbar if needed */
+        padding: 4px 4px 20px 4px; /* Added padding to avoid cutting off shadows/borders */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
     }
 
-    .category-btn {
-        background: white;
-        border: 1px solid #f0f0f0;
-        border-radius: 20px;
-        padding: 15px;
+    .category-nav::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+    }
+
+    .category-pill {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        min-width: 80px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .category-pill:hover {
+        transform: translateY(-2px);
+    }
+
+    .category-pill .icon {
+        width: 60px;
+        height: 60px;
+        background-color: var(--bg-secondary);
+        border-radius: var(--radius-md);
+        display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 80px;
-        flex: 1;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-        cursor: pointer;
+        font-size: 28px;
         transition:
-            transform 0.2s,
-            box-shadow 0.2s;
+            background-color 0.2s,
+            border-color 0.2s;
+        border: 1px solid #808080; /* Deep gray border */
     }
 
-    .category-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-        border-color: #e0e0e0;
+    .category-pill:hover .icon {
+        background-color: var(--bg-tertiary);
+        border-color: var(--primary-color);
     }
 
-    .category-btn .icon {
-        font-size: 2rem;
-        margin-bottom: 8px;
-    }
-
-    .category-btn .label {
-        font-size: 0.85rem;
+    .category-pill .label {
+        font-size: 13px;
         font-weight: 600;
-        color: #333;
     }
 
-    /* Hero Banner Styles */
-    .hero-content {
-        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-        border-radius: 24px;
-        padding: 30px;
+    /* Banner */
+    .banner {
+        background-color: #fdf4f5; /* Light Red/Pink tint */
+        border-radius: var(--radius-lg);
+        padding: 40px 60px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: white;
         position: relative;
         overflow: hidden;
-        min-height: 180px;
-        box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
     }
 
-    .text-content {
+    .banner-content {
         z-index: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .offer {
-        display: block;
-        font-size: 1rem;
-        margin-bottom: 5px;
-        opacity: 0.95;
-        font-weight: 500;
+        max-width: 50%;
     }
 
     h1 {
-        font-size: 3rem;
-        font-weight: 800;
-        margin: 0;
+        font-size: 48px;
+        color: var(--secondary-color);
+        margin-bottom: 12px;
         line-height: 1.1;
     }
 
-    .date {
-        margin: 8px 0 20px;
-        opacity: 0.9;
-        font-size: 0.9rem;
+    p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
     }
 
     .cta-btn {
-        background-color: white;
-        color: #22c55e;
+        background-color: var(--primary-color);
+        color: white;
         border: none;
-        padding: 10px 24px;
-        border-radius: 25px;
+        padding: 12px 32px;
+        border-radius: var(--radius-pill);
+        font-size: 16px;
         font-weight: 700;
-        font-size: 0.95rem;
         cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.1s;
+        transition: background-color 0.2s;
     }
 
-    .cta-btn:active {
-        transform: scale(0.95);
+    .cta-btn:hover {
+        background-color: var(--primary-hover);
     }
 
-    .pizza-slice {
-        font-size: 7rem;
-        transform: rotate(15deg);
-        filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.2));
+    .banner-image {
+        position: relative;
+    }
+
+    .food-emoji {
+        font-size: 120px;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .banner {
+            flex-direction: column-reverse;
+            text-align: center;
+            padding: 30px 20px;
+            gap: 20px;
+        }
+
+        .banner-content {
+            max-width: 100%;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .food-emoji {
+            font-size: 80px;
+        }
     }
 </style>

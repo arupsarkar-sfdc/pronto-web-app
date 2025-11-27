@@ -159,5 +159,6 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    padding-top: calc(var(--header-height) + 20px);
   }
 </style>

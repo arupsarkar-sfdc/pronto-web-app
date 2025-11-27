@@ -1,75 +1,252 @@
 <script>
     import { createEventDispatcher } from "svelte";
+
     const dispatch = createEventDispatcher();
-    // Header logic if needed
+
+    let deliveryMode = "Delivery"; // Delivery or Pickup
+    let address = "New York, NY";
 </script>
 
 <header>
-    <div class="logo">Pronto</div>
-    <nav>
-        <a href="#" class="active">Home</a>
-        <a href="#">Products <span>⌄</span></a>
-        <a href="#">Cart <span>⌄</span></a>
-        <a href="#">Orders</a>
-    </nav>
-    <div class="auth-links">
-        <a href="#" on:click|preventDefault={() => dispatch("login")}>Log In</a>
-        <a href="#" on:click|preventDefault={() => dispatch("register")}
-            >Register</a
-        >
+    <div class="header-content">
+        <!-- Left: Logo & Address -->
+        <div class="left-section">
+            <div class="logo">Pronto</div>
+
+            <div class="delivery-toggle">
+                <button
+                    class="toggle-btn {deliveryMode === 'Delivery'
+                        ? 'active'
+                        : ''}"
+                    on:click={() => (deliveryMode = "Delivery")}
+                    >Delivery</button
+                >
+                <button
+                    class="toggle-btn {deliveryMode === 'Pickup'
+                        ? 'active'
+                        : ''}"
+                    on:click={() => (deliveryMode = "Pickup")}>Pickup</button
+                >
+            </div>
+
+            <div class="address-pill">
+                <span class="icon">📍</span>
+                <span class="text">{address} • Now</span>
+                <span class="arrow">▾</span>
+            </div>
+        </div>
+
+        <!-- Center: Search -->
+        <div class="center-section">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="text"
+                    placeholder="Search for food, coffee, etc..."
+                />
+            </div>
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="right-section">
+            <button class="action-btn cart-btn">
+                <span class="icon">🛒</span>
+                <span class="label">Cart • 0</span>
+            </button>
+
+            <div class="auth-buttons">
+                <button
+                    class="auth-btn login"
+                    on:click={() => dispatch("login")}>Log In</button
+                >
+                <button
+                    class="auth-btn register"
+                    on:click={() => dispatch("register")}>Sign Up</button
+                >
+            </div>
+        </div>
     </div>
 </header>
 
 <style>
     header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--header-height);
+        background-color: var(--bg-color);
+        box-shadow: var(--shadow-sm);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .header-content {
+        width: 100%;
+        max-width: var(--container-width);
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 15px 30px;
-        background-color: white;
-        border-bottom: 1px solid #eee;
-        font-family: "Inter", sans-serif;
+        gap: 20px;
+    }
+
+    .left-section {
+        display: flex;
+        align-items: center;
+        gap: 24px;
     }
 
     .logo {
-        font-weight: 700;
-        font-size: 1.2rem;
-        color: #333;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--primary-color);
+        letter-spacing: -0.03em;
+        cursor: pointer;
     }
 
-    nav {
+    .delivery-toggle {
+        background-color: var(--bg-tertiary);
+        border-radius: var(--radius-pill);
+        padding: 4px;
         display: flex;
-        gap: 20px;
     }
 
-    nav a {
-        text-decoration: none;
-        color: #555;
-        font-size: 0.95rem;
+    .toggle-btn {
+        background: none;
+        border: none;
+        padding: 6px 16px;
+        border-radius: var(--radius-pill);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .address-pill {
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: var(--radius-pill);
+        background-color: var(--bg-secondary);
+        cursor: pointer;
+        transition: background-color 0.2s;
     }
 
-    nav a.active {
-        color: #0070d2;
-        background-color: #f0f8ff;
-        padding: 5px 10px;
-        border-radius: 4px;
+    .address-pill:hover {
+        background-color: var(--bg-tertiary);
     }
 
-    nav a span {
-        font-size: 0.8rem;
+    .address-pill .text {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
     }
 
-    .auth-links {
+    .center-section {
+        flex: 1;
+        max-width: 600px;
+    }
+
+    .search-bar {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        border-radius: var(--radius-pill);
+        border: 1px solid transparent;
+        background-color: var(--bg-secondary);
+        font-size: 15px;
+        font-weight: 500;
+        outline: none;
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+
+    .search-bar input:focus {
+        background-color: var(--bg-color);
+        border-color: var(--text-primary);
+        box-shadow: var(--shadow-md);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.5;
+    }
+
+    .right-section {
         display: flex;
-        gap: 20px;
+        align-items: center;
+        gap: 16px;
     }
 
-    .auth-links a {
-        text-decoration: none;
-        color: #555;
-        font-size: 0.9rem;
+    .action-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .auth-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .auth-btn {
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .auth-btn.login {
+        background: none;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .auth-btn.login:hover {
+        background-color: var(--bg-secondary);
+    }
+
+    .auth-btn.register {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+
+    .auth-btn.register:hover {
+        opacity: 0.9;
     }
 </style>
