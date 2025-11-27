@@ -1,0 +1,1424 @@
+{
+  "records": [
+    {
+      "developerName": "addToFavorite",
+      "masterLabel": "Add To Favorite",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "giftMessage",
+          "dataType": "Text",
+          "developerName": "giftMessage",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "giftWrap",
+          "dataType": "Text",
+          "developerName": "giftWrap",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "product",
+          "dataType": "Text",
+          "developerName": "product",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "productId",
+          "dataType": "Text",
+          "developerName": "productId",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "productPrice",
+          "dataType": "Number",
+          "developerName": "productPrice",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "specialAttributesOccasion",
+          "dataType": "Text",
+          "developerName": "specialAttributesOccasion",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "specialAttributesPaperColor",
+          "dataType": "Text",
+          "developerName": "specialAttributesPaperColor",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "specialAttributesRibbon",
+          "dataType": "Text",
+          "developerName": "specialAttributesRibbon",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "specialAttributesSize",
+          "dataType": "Text",
+          "developerName": "specialAttributesSize",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 18,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "appEvents",
+      "masterLabel": "App Events",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "appName",
+          "dataType": "Text",
+          "developerName": "appName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "appVersion",
+          "dataType": "Text",
+          "developerName": "appVersion",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "behaviorType",
+          "dataType": "Text",
+          "developerName": "behaviorType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "previousAppVersion",
+          "dataType": "Text",
+          "developerName": "previousAppVersion",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "screenName",
+          "dataType": "Text",
+          "developerName": "screenName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 11,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "cart",
+      "masterLabel": "Cart",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "interactionName",
+          "dataType": "Text",
+          "developerName": "interactionName",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 10,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "cartItem",
+      "masterLabel": "Cart Item",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "cartEventId",
+          "dataType": "Text",
+          "developerName": "cartEventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "catalogObjectId",
+          "dataType": "Text",
+          "developerName": "catalogObjectId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "catalogObjectType",
+          "dataType": "Text",
+          "developerName": "catalogObjectType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "currency",
+          "dataType": "Text",
+          "developerName": "currency",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "price",
+          "dataType": "Number",
+          "developerName": "price",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "quantity",
+          "dataType": "Number",
+          "developerName": "quantity",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 12,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "catalog",
+      "masterLabel": "Catalog",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "id",
+          "dataType": "Text",
+          "developerName": "id",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "interactionName",
+          "dataType": "Text",
+          "developerName": "interactionName",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "type",
+          "dataType": "Text",
+          "developerName": "type",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 12,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "consentLog",
+      "masterLabel": "Consent",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "provider",
+          "dataType": "Text",
+          "developerName": "provider",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "purpose",
+          "dataType": "Text",
+          "developerName": "purpose",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "status",
+          "dataType": "Text",
+          "developerName": "status",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 9,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "contactPointAddress",
+      "masterLabel": "Contact Point Address",
+      "category": "Profile",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "addressLine1",
+          "dataType": "Text",
+          "developerName": "addressLine1",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine2",
+          "dataType": "Text",
+          "developerName": "addressLine2",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine3",
+          "dataType": "Text",
+          "developerName": "addressLine3",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine4",
+          "dataType": "Text",
+          "developerName": "addressLine4",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "city",
+          "dataType": "Text",
+          "developerName": "city",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "country",
+          "dataType": "Text",
+          "developerName": "country",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "postalCode",
+          "dataType": "Text",
+          "developerName": "postalCode",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "stateProvince",
+          "dataType": "Text",
+          "developerName": "stateProvince",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 17,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "contactPointEmail",
+      "masterLabel": "Contact Point Email",
+      "category": "Profile",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "email",
+          "dataType": "Text",
+          "developerName": "email",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 10,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "contactPointPhone",
+      "masterLabel": "Contact Point Phone",
+      "category": "Profile",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "phoneNumber",
+          "dataType": "Text",
+          "developerName": "phoneNumber",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 10,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "identity",
+      "masterLabel": "Identity",
+      "category": "Profile",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "addressLine1",
+          "dataType": "Text",
+          "developerName": "addressLine1",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine2",
+          "dataType": "Text",
+          "developerName": "addressLine2",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine3",
+          "dataType": "Text",
+          "developerName": "addressLine3",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "addressLine4",
+          "dataType": "Text",
+          "developerName": "addressLine4",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "advertiserId",
+          "dataType": "Text",
+          "developerName": "advertiserId",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "city",
+          "dataType": "Text",
+          "developerName": "city",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "country",
+          "dataType": "Text",
+          "developerName": "country",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceType",
+          "dataType": "Text",
+          "developerName": "deviceType",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "email",
+          "dataType": "Text",
+          "developerName": "email",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "firstName",
+          "dataType": "Text",
+          "developerName": "firstName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "isAnonymous",
+          "dataType": "Text",
+          "developerName": "isAnonymous",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "lastName",
+          "dataType": "Text",
+          "developerName": "lastName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "osName",
+          "dataType": "Text",
+          "developerName": "osName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "osVersion",
+          "dataType": "Text",
+          "developerName": "osVersion",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "phoneNumber",
+          "dataType": "Text",
+          "developerName": "phoneNumber",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "postalCode",
+          "dataType": "Text",
+          "developerName": "postalCode",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "registrationId",
+          "dataType": "Text",
+          "developerName": "registrationId",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "softwareApplicationName",
+          "dataType": "Text",
+          "developerName": "softwareApplicationName",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "softwareApplicationVersion",
+          "dataType": "Text",
+          "developerName": "softwareApplicationVersion",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "stateProvince",
+          "dataType": "Text",
+          "developerName": "stateProvince",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 29,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "order",
+      "masterLabel": "Order",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "interactionName",
+          "dataType": "Text",
+          "developerName": "interactionName",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "orderCurrency",
+          "dataType": "Text",
+          "developerName": "orderCurrency",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "orderId",
+          "dataType": "Text",
+          "developerName": "orderId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "orderTotalValue",
+          "dataType": "Number",
+          "developerName": "orderTotalValue",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 13,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "orderItem",
+      "masterLabel": "Order Item",
+      "category": "Engagement",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "catalogObjectId",
+          "dataType": "Text",
+          "developerName": "catalogObjectId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "catalogObjectType",
+          "dataType": "Text",
+          "developerName": "catalogObjectType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "currency",
+          "dataType": "Text",
+          "developerName": "currency",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "orderEventId",
+          "dataType": "Text",
+          "developerName": "orderEventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "price",
+          "dataType": "Number",
+          "developerName": "price",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "quantity",
+          "dataType": "Number",
+          "developerName": "quantity",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 12,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    },
+    {
+      "developerName": "partyIdentification",
+      "masterLabel": "Party Identification",
+      "category": "Profile",
+      "availabilityStatus": "INUSE",
+      "externalDataTranFields": [
+        {
+          "masterLabel": "category",
+          "dataType": "Text",
+          "developerName": "category",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "channel",
+          "dataType": "Text",
+          "developerName": "channel",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "dateTime",
+          "dataType": "DateTime",
+          "developerName": "dateTime",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "deviceId",
+          "dataType": "Text",
+          "developerName": "deviceId",
+          "isDataRequired": true,
+          "primaryIndexOrder": 1,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventId",
+          "dataType": "Text",
+          "developerName": "eventId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "eventType",
+          "dataType": "Text",
+          "developerName": "eventType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "IDName",
+          "dataType": "Text",
+          "developerName": "IDName",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "IDType",
+          "dataType": "Text",
+          "developerName": "IDType",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "latitude",
+          "dataType": "Number",
+          "developerName": "latitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "longitude",
+          "dataType": "Number",
+          "developerName": "longitude",
+          "isDataRequired": false,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "sessionId",
+          "dataType": "Text",
+          "developerName": "sessionId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        },
+        {
+          "masterLabel": "userId",
+          "dataType": "Text",
+          "developerName": "userId",
+          "isDataRequired": true,
+          "isCurrencyIsoCode": false
+        }
+      ],
+      "fieldCount": 12,
+      "availabilityStatusLabel": {
+        "label": "In Use",
+        "rawValue": "INUSE"
+      },
+      "streamingAppLabel": "Acme Travel App"
+    }
+  ]
+}
