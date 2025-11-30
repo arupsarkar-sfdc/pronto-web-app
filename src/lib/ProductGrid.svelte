@@ -82,7 +82,11 @@
                         <span class="star">★</span>
                         <span class="score">{product.rating}</span>
                     </div>
-                    <button class="add-btn" on:click|stopPropagation>
+                    <button
+                        class="add-btn"
+                        on:click|stopPropagation={() =>
+                            dispatch("addToCart", product)}
+                    >
                         <span class="plus">+</span>
                     </button>
                 </div>

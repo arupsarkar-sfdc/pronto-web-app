@@ -234,4 +234,18 @@ export function sendCategoryView(categoryName) {
     return sendEvent("catalog", payload);
 }
 
+export function sendAddToCart(product) {
+    const payload = {
+        eventType: "cart",
+        interactionName: "AddToCart",
+        category: "Engagement",
+        catalogObjectType: "Product",
+        catalogObjectId: product.name, // Using name as requested
+        quantity: 1,
+        price: product.price,
+        currency: "USD"
+    };
+    return sendEvent("cart", payload);
+}
+
 

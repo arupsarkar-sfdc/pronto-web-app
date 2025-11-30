@@ -1,11 +1,17 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { cart, user, isCartOpen } from "./stores";
 
     const dispatch = createEventDispatcher();
 
     let deliveryMode = "Delivery"; // Delivery or Pickup
     let address = "New York, NY";
-    export let isLoggedIn = false;
+
+    $: cartCount = $cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    function toggleCart() {
+        $isCartOpen = !$isCartOpen;
+    }
 </script>
 
 <header>
@@ -50,13 +56,13 @@
 
         <!-- Right: Actions -->
         <div class="right-section">
-            <button class="action-btn cart-btn">
+            <button class="action-btn cart-btn" on:click={toggleCart}>
                 <span class="icon">🛒</span>
-                <span class="label">Cart • 0</span>
+                <span class="label">Cart • {cartCount}</span>
             </button>
 
             <div class="auth-buttons">
-                {#if isLoggedIn}
+                {#if $user.isLoggedIn}
                     <button
                         class="auth-btn login"
                         on:click={() => dispatch("logout")}>Log Out</button

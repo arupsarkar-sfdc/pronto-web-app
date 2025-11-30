@@ -12,7 +12,11 @@
     sendIdentity,
     sendProductView,
     sendCategoryView,
+    sendAddToCart,
   } from "./lib/websdk";
+
+  import { cart, user, isCartOpen } from "./lib/stores";
+  import CartModal from "./lib/CartModal.svelte";
 
   // Modal State
   let isModalOpen = false;
@@ -25,7 +29,6 @@
   // Auth Modal State
   let isAuthModalOpen = false;
   let authMode = "login";
-  let isLoggedIn = false;
 
   onMount(() => {
     // Initialize WebSDK on mount with default or existing config
@@ -94,16 +97,15 @@
     sendIdentity(event.detail)
       .then(() => {
         console.log("Identity event sent successfully");
-        isLoggedIn = true;
+        user.login(event.detail);
       })
       .catch((err) => console.error("Failed to send identity event", err));
     isAuthModalOpen = false;
   }
 
   function handleLogout() {
-    isLoggedIn = false;
+    user.logout();
     console.log("User logged out");
-    // Optional: Send a logout event if supported by SDK, or clear session
   }
 
   function handleProductClick(event) {
@@ -112,6 +114,15 @@
     sendProductView(event.detail)
       .then(() => console.log("Product view event sent successfully"))
       .catch((err) => console.error("Failed to send product view event", err));
+  }
+
+  function handleAddToCart(event) {
+    const product = event.detail;
+    cart.addToCart(product);
+    // Send Add To Cart Event
+    sendAddToCart(product)
+      .then(() => console.log("Add to Cart event sent successfully"))
+      .catch((err) => console.error("Failed to send Add to Cart event", err));
   }
 
   function handleCategoryClick(event) {
@@ -125,7 +136,6 @@
 
 <div class="app-container">
   <Header
-    {isLoggedIn}
     on:login={openLogin}
     on:register={openRegister}
     on:logout={handleLogout}
@@ -133,7 +143,10 @@
 
   <main>
     <Hero on:categoryClick={handleCategoryClick} />
-    <ProductGrid on:productClick={handleProductClick} />
+    <ProductGrid
+      on:productClick={handleProductClick}
+      on:addToCart={handleAddToCart}
+    />
   </main>
 
   <Modal
@@ -149,6 +162,8 @@
     mode={authMode}
     on:submit={handleAuthSubmit}
   />
+
+  <CartModal />
 </div>
 
 <style>
