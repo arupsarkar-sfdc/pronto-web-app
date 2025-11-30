@@ -1,86 +1,52 @@
-# Pronto - Premium Food Delivery App
+# Pronto
 
-## 🎯 Objectives
-**Pronto** is a high-fidelity, modern web application designed to demonstrate the power of **Salesforce Data Cloud** and **Interaction Studio (WebSDK)** integration. 
+Pronto is a reference implementation of a food delivery application built with Svelte. It demonstrates how to integrate **Salesforce Personalization** and **Data Cloud** for real-time event tracking.
 
-The primary goals of this project are:
-1.  **Premium User Experience**: Deliver a visually stunning, responsive UI inspired by top-tier delivery platforms (DoorDash, UberEats).
-2.  **Data Cloud Integration**: Seamlessly capture and send high-value user engagement events (Identity, Product Views, Add to Cart, Orders) to Salesforce.
-3.  **Modern Architecture**: Showcase best practices in frontend development using **Svelte**, **Vite**, and **State Management**.
+## Overview
 
-## 🚀 Process & Architecture
-The application is built with a component-driven architecture, ensuring modularity and maintainability.
+This project serves as a proof-of-concept for:
+*   **Event Tracking**: capturing user interactions (Identity, Catalog Views, Cart actions) and sending them to Salesforce.
+*   **Frontend Architecture**: using Svelte v4 with Vite for a performant, component-based UI.
+*   **State Management**: utilizing native Svelte Stores for handling cart and session state.
 
-### Tech Stack
--   **Framework**: [Svelte](https://svelte.dev/) (v4)
--   **Build Tool**: [Vite](https://vitejs.dev/)
--   **State Management**: Svelte Stores (Native)
--   **Styling**: Vanilla CSS (Variables, Flexbox, Grid)
--   **Analytics**: Salesforce WebSDK (Interaction Studio)
+## Tech Stack
 
-### Key Components
--   **`App.svelte`**: Main application shell and layout orchestrator.
--   **`stores.js`**: Centralized state management for `cart` and `user` sessions.
--   **`websdk.js`**: Abstraction layer for Salesforce Interactions SDK, handling event payloads and consent.
--   **`CartModal.svelte`**: Dynamic shopping cart interface.
--   **`ProductGrid.svelte`**: Responsive grid displaying products with interactive elements.
+*   **Framework**: Svelte 4
+*   **Build**: Vite
+*   **State**: Svelte Stores
+*   **Analytics**: Salesforce Interactions SDK (WebSDK)
 
-## ⚙️ Operations & Features
-The application supports a complete user journey:
+## Key Components
 
-1.  **Authentication**:
-    -   User Registration and Login (Simulated).
-    -   Identity resolution sent to Data Cloud.
-2.  **Browsing**:
-    -   Category navigation with "pills" UI.
-    -   Product discovery with rich media and ratings.
-3.  **Shopping**:
-    -   **Add to Cart**: Real-time cart updates.
-    -   **Cart Management**: Adjust quantities, view totals, and checkout.
-4.  **Personalization**:
-    -   Dynamic Hero Banner driven by user attributes (simulated via SDK).
+*   `src/lib/websdk.js`: Wrapper for the Salesforce SDK. Handles initialization and event payloads.
+*   `src/lib/stores.js`: Centralized store for `cart` and `user` state.
+*   `src/App.svelte`: Main layout and initialization logic.
 
-## 🧪 Testing
-We employ a rigorous verification process:
-
-### Manual Verification
--   **UI/UX**: Visual inspection across different viewports (Desktop, Tablet, Mobile).
--   **Event Tracking**: Using the browser console and Network tab to verify `interaction` and `catalog` events sent to Salesforce.
--   **State Consistency**: Verifying that cart counts and login states persist correctly across component interactions.
-
-### Automated Checks
--   **Linting**: `eslint` for code quality and style consistency.
--   **Build Checks**: `vite build` ensures all assets are optimized and free of compilation errors.
-
-## 🛠️ Build & Run
-Follow these steps to set up the project locally:
+## Setup
 
 ### Prerequisites
--   Node.js (v16+)
--   npm (v8+)
+*   Node.js 16+
+*   npm 8+
 
 ### Installation
-```bash
-# Clone the repository
-git clone <repository-url>
 
-# Install dependencies
+```bash
+git clone <repo>
 npm install
 ```
 
 ### Development
-Start the local development server with Hot Module Replacement (HMR):
+
+Run the local dev server:
+
 ```bash
 npm run dev
 ```
-Access the app at `http://localhost:5173`.
 
-### Production Build
-Create an optimized production build:
+### Build
+
+Build for production:
+
 ```bash
 npm run build
-```
-Preview the production build locally:
-```bash
-npm run preview
 ```
