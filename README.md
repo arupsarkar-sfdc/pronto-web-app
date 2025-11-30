@@ -1,47 +1,86 @@
-# Svelte + Vite
+# Pronto - Premium Food Delivery App
 
-This template should help get you started developing with Svelte in Vite.
+## 🎯 Objectives
+**Pronto** is a high-fidelity, modern web application designed to demonstrate the power of **Salesforce Data Cloud** and **Interaction Studio (WebSDK)** integration. 
 
-## Recommended IDE Setup
+The primary goals of this project are:
+1.  **Premium User Experience**: Deliver a visually stunning, responsive UI inspired by top-tier delivery platforms (DoorDash, UberEats).
+2.  **Data Cloud Integration**: Seamlessly capture and send high-value user engagement events (Identity, Product Views, Add to Cart, Orders) to Salesforce.
+3.  **Modern Architecture**: Showcase best practices in frontend development using **Svelte**, **Vite**, and **State Management**.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## 🚀 Process & Architecture
+The application is built with a component-driven architecture, ensuring modularity and maintainability.
 
-## Need an official Svelte framework?
+### Tech Stack
+-   **Framework**: [Svelte](https://svelte.dev/) (v4)
+-   **Build Tool**: [Vite](https://vitejs.dev/)
+-   **State Management**: Svelte Stores (Native)
+-   **Styling**: Vanilla CSS (Variables, Flexbox, Grid)
+-   **Analytics**: Salesforce WebSDK (Interaction Studio)
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+### Key Components
+-   **`App.svelte`**: Main application shell and layout orchestrator.
+-   **`stores.js`**: Centralized state management for `cart` and `user` sessions.
+-   **`websdk.js`**: Abstraction layer for Salesforce Interactions SDK, handling event payloads and consent.
+-   **`CartModal.svelte`**: Dynamic shopping cart interface.
+-   **`ProductGrid.svelte`**: Responsive grid displaying products with interactive elements.
 
-## Technical considerations
+## ⚙️ Operations & Features
+The application supports a complete user journey:
 
-**Why use this over SvelteKit?**
+1.  **Authentication**:
+    -   User Registration and Login (Simulated).
+    -   Identity resolution sent to Data Cloud.
+2.  **Browsing**:
+    -   Category navigation with "pills" UI.
+    -   Product discovery with rich media and ratings.
+3.  **Shopping**:
+    -   **Add to Cart**: Real-time cart updates.
+    -   **Cart Management**: Adjust quantities, view totals, and checkout.
+4.  **Personalization**:
+    -   Dynamic Hero Banner driven by user attributes (simulated via SDK).
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+## 🧪 Testing
+We employ a rigorous verification process:
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+### Manual Verification
+-   **UI/UX**: Visual inspection across different viewports (Desktop, Tablet, Mobile).
+-   **Event Tracking**: Using the browser console and Network tab to verify `interaction` and `catalog` events sent to Salesforce.
+-   **State Consistency**: Verifying that cart counts and login states persist correctly across component interactions.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+### Automated Checks
+-   **Linting**: `eslint` for code quality and style consistency.
+-   **Build Checks**: `vite build` ensures all assets are optimized and free of compilation errors.
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+## 🛠️ Build & Run
+Follow these steps to set up the project locally:
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+### Prerequisites
+-   Node.js (v16+)
+-   npm (v8+)
 
-**Why include `.vscode/extensions.json`?**
+### Installation
+```bash
+# Clone the repository
+git clone <repository-url>
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+# Install dependencies
+npm install
+```
 
-**Why enable `checkJs` in the JS template?**
+### Development
+Start the local development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
+```
+Access the app at `http://localhost:5173`.
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+### Production Build
+Create an optimized production build:
+```bash
+npm run build
+```
+Preview the production build locally:
+```bash
+npm run preview
 ```
