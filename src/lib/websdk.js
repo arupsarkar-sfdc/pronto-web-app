@@ -78,16 +78,23 @@ function sendEvent(eventName, payload) {
                     provider: "Pronto",
                     purpose: "Tracking", // Updated from "Analytics"
                     status: "Opt In" // Force Opt In for now to verify connectivity, or read from config if possible
-                }],
-                interaction: {
+                }]
+            };
+
+            // Check if payload has a 'user' property (for Profile events)
+            if (payload.user) {
+                fullPayload.user = payload.user;
+            } else {
+                // Default to interaction object (for Engagement events)
+                fullPayload.interaction = {
                     name: eventName,
                     ...payload,
                     sessionId: getSessionId(),
                     deviceId: getDeviceId(),
                     dateTime: new Date().toISOString(),
                     eventId: getUUID()
-                }
-            };
+                };
+            }
 
             console.log(`[WebSDK] Sending ${eventName} event:`, fullPayload);
 
@@ -185,26 +192,21 @@ export function sendConsent(status) {
 
 export function sendIdentity(user) {
     const payload = {
-        eventType: "identity",
-        category: "Profile",
-        isAnonymous: false,
-        userId: user.email,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
+        user: {
+            attributes: {
+                eventType: "identity",
+                isAnonymous: 0, // Using 0 as requested, though boolean false is often standard
+                email: user.email,
+                userId: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName
+            }
+        }
     };
     return sendEvent("identity", payload);
 }
 
-export function sendContactPointEmail(user) {
-    const payload = {
-        eventType: "contactPointEmail",
-        category: "Profile",
-        email: user.email,
-        primaryFlag: true
-    };
-    return sendEvent("contactPointEmail", payload);
-}
+
 
 export function sendProductView(product) {
     const payload = {
@@ -214,7 +216,7 @@ export function sendProductView(product) {
         id: product.id.toString(),
         interactionName: `View Product ${product.name}`,
         catalogObjectType: "Product",
-        catalogObjectId: product.id.toString()
+        catalogObjectId: product.name
     };
     return sendEvent("catalog", payload);
 }
@@ -231,3 +233,5 @@ export function sendCategoryView(categoryName) {
     };
     return sendEvent("catalog", payload);
 }
+
+

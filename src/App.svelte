@@ -10,7 +10,6 @@
     initWebSDK,
     sendConsent,
     sendIdentity,
-    sendContactPointEmail,
     sendProductView,
     sendCategoryView,
   } from "./lib/websdk";
@@ -26,6 +25,7 @@
   // Auth Modal State
   let isAuthModalOpen = false;
   let authMode = "login";
+  let isLoggedIn = false;
 
   onMount(() => {
     // Initialize WebSDK on mount with default or existing config
@@ -94,17 +94,16 @@
     sendIdentity(event.detail)
       .then(() => {
         console.log("Identity event sent successfully");
-        // Also send Contact Point Email event
-        sendContactPointEmail(event.detail)
-          .then(() =>
-            console.log("Contact Point Email event sent successfully"),
-          )
-          .catch((err) =>
-            console.error("Failed to send Contact Point Email event", err),
-          );
+        isLoggedIn = true;
       })
       .catch((err) => console.error("Failed to send identity event", err));
     isAuthModalOpen = false;
+  }
+
+  function handleLogout() {
+    isLoggedIn = false;
+    console.log("User logged out");
+    // Optional: Send a logout event if supported by SDK, or clear session
   }
 
   function handleProductClick(event) {
@@ -125,7 +124,12 @@
 </script>
 
 <div class="app-container">
-  <Header on:login={openLogin} on:register={openRegister} />
+  <Header
+    {isLoggedIn}
+    on:login={openLogin}
+    on:register={openRegister}
+    on:logout={handleLogout}
+  />
 
   <main>
     <Hero on:categoryClick={handleCategoryClick} />

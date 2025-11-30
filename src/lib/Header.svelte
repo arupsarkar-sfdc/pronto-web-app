@@ -5,6 +5,7 @@
 
     let deliveryMode = "Delivery"; // Delivery or Pickup
     let address = "New York, NY";
+    export let isLoggedIn = false;
 </script>
 
 <header>
@@ -55,14 +56,21 @@
             </button>
 
             <div class="auth-buttons">
-                <button
-                    class="auth-btn login"
-                    on:click={() => dispatch("login")}>Log In</button
-                >
-                <button
-                    class="auth-btn register"
-                    on:click={() => dispatch("register")}>Sign Up</button
-                >
+                {#if isLoggedIn}
+                    <button
+                        class="auth-btn login"
+                        on:click={() => dispatch("logout")}>Log Out</button
+                    >
+                {:else}
+                    <button
+                        class="auth-btn login"
+                        on:click={() => dispatch("login")}>Log In</button
+                    >
+                    <button
+                        class="auth-btn register"
+                        on:click={() => dispatch("register")}>Sign Up</button
+                    >
+                {/if}
             </div>
         </div>
     </div>
