@@ -62,6 +62,7 @@
                 <span class="text">{address} • Now</span>
                 <span class="arrow">▾</span>
             </div>
+            <a href="#/admin" class="admin-link">Admin</a>
         </div>
 
         <!-- Center: Search -->
@@ -192,6 +193,21 @@
     .address-pill .text {
         font-size: 14px;
         font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .admin-link {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .admin-link:hover {
+        background-color: var(--bg-tertiary);
         color: var(--text-primary);
     }
 

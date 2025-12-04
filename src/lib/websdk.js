@@ -60,13 +60,22 @@ function getSessionId() {
     return sessionId;
 }
 
-function getDeviceId() {
+export function getDeviceId() {
     let deviceId = localStorage.getItem('deviceId');
     if (!deviceId) {
         deviceId = getUUID();
         localStorage.setItem('deviceId', deviceId);
     }
     return deviceId;
+}
+
+export function getSDKAnonymousId() {
+    // @ts-ignore
+    if (window.SalesforceInteractions && window.SalesforceInteractions.getAnonymousId) {
+        // @ts-ignore
+        return window.SalesforceInteractions.getAnonymousId();
+    }
+    return null;
 }
 
 function sendEvent(eventName, payload) {
@@ -213,7 +222,7 @@ export function sendProductView(product) {
         eventType: "catalog",
         category: "Engagement",
         type: "Product",
-        id: product.id.toString(),
+        id: product.name, // Updated to match catalogObjectId as requested
         interactionName: `View Product ${product.name}`,
         catalogObjectType: "Product",
         catalogObjectId: product.name

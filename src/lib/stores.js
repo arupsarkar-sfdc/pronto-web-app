@@ -50,3 +50,8 @@ function createUser() {
 export const user = createUser();
 
 export const isCartOpen = writable(false);
+
+export const authToken = writable(null);
+export const fetchedPayloadData = writable(null);
+export const tokenEndpoint = writable("/get-token");
+export const sourceRecordId = writable("");

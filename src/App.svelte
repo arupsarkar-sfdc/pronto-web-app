@@ -17,6 +17,7 @@
 
   import { cart, user, isCartOpen } from "./lib/stores";
   import CartModal from "./lib/CartModal.svelte";
+  import AdminPage from "./lib/AdminPage.svelte";
 
   // Modal State
   let isModalOpen = false;
@@ -30,7 +31,24 @@
   let isAuthModalOpen = false;
   let authMode = "login";
 
+  // Routing State
+  let currentPage = "home"; // 'home' | 'admin'
+
+  function handleHashChange() {
+    const hash = window.location.hash;
+    if (hash === "#/admin") {
+      currentPage = "admin";
+    } else {
+      currentPage = "home";
+    }
+  }
+
   onMount(() => {
+    // Set initial page based on hash
+    handleHashChange();
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+
     // Initialize WebSDK on mount with default or existing config
     if (cdnScript) {
       injectWebSDK(cdnScript)
@@ -142,11 +160,15 @@
   />
 
   <main>
-    <Hero on:categoryClick={handleCategoryClick} />
-    <ProductGrid
-      on:productClick={handleProductClick}
-      on:addToCart={handleAddToCart}
-    />
+    {#if currentPage === "admin"}
+      <AdminPage />
+    {:else}
+      <Hero on:categoryClick={handleCategoryClick} />
+      <ProductGrid
+        on:productClick={handleProductClick}
+        on:addToCart={handleAddToCart}
+      />
+    {/if}
   </main>
 
   <Modal
