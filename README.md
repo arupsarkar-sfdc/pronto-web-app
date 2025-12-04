@@ -2,6 +2,8 @@
 
 Pronto is a reference implementation of a food delivery application built with Svelte. It demonstrates how to integrate **Salesforce Personalization** and **Data Cloud** for real-time event tracking.
 
+**Live Demo**: [https://pronto-0cbc99400f5d.herokuapp.com/](https://pronto-0cbc99400f5d.herokuapp.com/)
+
 ## Overview
 
 This project serves as a proof-of-concept for:
