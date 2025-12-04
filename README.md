@@ -50,3 +50,34 @@ Build for production:
 ```bash
 npm run build
 ```
+
+## Deployment
+
+### Heroku
+
+This project is configured to run on Heroku as a static site using `serve`.
+
+1.  **Install the Heroku CLI**:
+    [Download and install](https://devcenter.heroku.com/articles/heroku-cli) the Heroku CLI for your OS.
+
+2.  **Login to Heroku**:
+    ```bash
+    heroku login
+    ```
+
+3.  **Create a new Heroku app**:
+    ```bash
+    heroku create
+    ```
+
+4.  **Deploy**:
+    ```bash
+    git push heroku main
+    ```
+
+5.  **Open the app**:
+    ```bash
+    heroku open
+    ```
+
+**Note**: The project uses a `Procfile` to execute `npm start`, which runs `serve -s dist -l $PORT`. Ensure your `dist` folder is built before local testing, but Heroku will handle the build automatically if `npm install` runs successfully.
