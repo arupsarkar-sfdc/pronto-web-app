@@ -1,13 +1,34 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount, onDestroy } from "svelte";
     import { cart, user, isCartOpen } from "./stores";
 
     const dispatch = createEventDispatcher();
 
     let deliveryMode = "Delivery"; // Delivery or Pickup
     let address = "New York, NY";
+    let currentTime = new Date();
+    let interval;
 
     $: cartCount = $cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    onMount(() => {
+        interval = setInterval(() => {
+            currentTime = new Date();
+        }, 1000);
+    });
+
+    onDestroy(() => {
+        clearInterval(interval);
+    });
+
+    $: formattedTime = currentTime.toLocaleString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+    });
 
     function toggleCart() {
         $isCartOpen = !$isCartOpen;
@@ -18,7 +39,7 @@
     <div class="header-content">
         <!-- Left: Logo & Address -->
         <div class="left-section">
-            <div class="logo">Pronto</div>
+            <div class="logo">🍔 Pronto</div>
 
             <div class="delivery-toggle">
                 <button
@@ -56,6 +77,12 @@
 
         <!-- Right: Actions -->
         <div class="right-section">
+            {#if $user.isLoggedIn && $user.profile}
+                <div class="welcome-msg">
+                    Welcome, {$user.profile.firstName} • {formattedTime}
+                </div>
+            {/if}
+
             <button class="action-btn cart-btn" on:click={toggleCart}>
                 <span class="icon">🛒</span>
                 <span class="label">Cart • {cartCount}</span>
@@ -209,6 +236,13 @@
         display: flex;
         align-items: center;
         gap: 16px;
+    }
+
+    .welcome-msg {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--primary-color);
+        white-space: nowrap;
     }
 
     .action-btn {
