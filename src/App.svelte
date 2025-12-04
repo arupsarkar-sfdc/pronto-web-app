@@ -189,17 +189,68 @@
 </div>
 
 <style>
+  :global(:root) {
+    /* Modern Color Palette */
+    --primary-color: #ff4500; /* Vibrant Orange-Red */
+    --primary-hover: #e03e00;
+    --secondary-color: #1a1a1a; /* Dark Charcoal */
+    --accent-color: #ffc107; /* Amber/Gold for ratings/highlights */
+
+    /* Backgrounds */
+    --bg-color: #ffffff;
+    --bg-secondary: #f8f9fa; /* Very light gray */
+    --bg-tertiary: #e9ecef;
+
+    /* Text */
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-light: #ffffff;
+
+    /* Borders & Shadows */
+    --border-color: #dee2e6;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    /* Layout */
+    --header-height: 72px;
+    --container-width: 1200px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 24px;
+    --radius-pill: 50px;
+  }
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
   .app-container {
-    font-family: "Inter", sans-serif;
-    color: #333;
-    background-color: #f9f9f9;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   main {
-    max-width: 1200px;
+    flex: 1;
+    width: 100%;
+    max-width: var(--container-width);
     margin: 0 auto;
-    padding: 20px;
-    padding-top: calc(var(--header-height) + 20px);
+    padding: 24px;
+    padding-top: calc(var(--header-height) + 24px);
+    box-sizing: border-box;
   }
 </style>

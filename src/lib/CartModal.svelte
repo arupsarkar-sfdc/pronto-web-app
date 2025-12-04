@@ -1,6 +1,8 @@
 <script>
     import { cart, isCartOpen } from "./stores";
     import { createEventDispatcher } from "svelte";
+    import { fly, fade } from "svelte/transition";
+    import { cubicOut } from "svelte/easing";
 
     const dispatch = createEventDispatcher();
 
@@ -20,31 +22,56 @@
 </script>
 
 {#if $isCartOpen}
-    <div class="modal-backdrop" on:click={close}>
-        <div class="modal-content" on:click|stopPropagation>
-            <div class="modal-header">
-                <h2>Your Cart</h2>
-                <button class="close-btn" on:click={close}>&times;</button>
-            </div>
+    <!-- Backdrop -->
+    <div
+        class="drawer-backdrop"
+        on:click={close}
+        transition:fade={{ duration: 200 }}
+    ></div>
 
-            <div class="cart-items">
-                {#if $cart.length === 0}
-                    <div class="empty-cart">
-                        <span class="empty-icon">🛒</span>
-                        <p>Your cart is empty</p>
-                    </div>
-                {:else}
-                    {#each $cart as item}
-                        <div class="cart-item">
-                            <div class="item-image">{item.image}</div>
-                            <div class="item-details">
-                                <h3>{item.name}</h3>
-                                <p class="item-price">${item.price}</p>
+    <!-- Drawer -->
+    <div
+        class="drawer"
+        transition:fly={{ x: 400, duration: 300, opacity: 1, easing: cubicOut }}
+        on:click|stopPropagation
+    >
+        <div class="drawer-header">
+            <h2>Your Cart <span class="count">({$cart.length})</span></h2>
+            <button class="close-btn" on:click={close}>
+                <span class="icon">✕</span>
+            </button>
+        </div>
+
+        <div class="drawer-body">
+            {#if $cart.length === 0}
+                <div class="empty-state">
+                    <div class="empty-icon">🛒</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added anything yet.</p>
+                    <button class="start-shopping-btn" on:click={close}
+                        >Start Shopping</button
+                    >
+                </div>
+            {:else}
+                <div class="cart-items">
+                    {#each $cart as item (item.id)}
+                        <div
+                            class="cart-item"
+                            transition:fly={{ y: 20, duration: 200 }}
+                        >
+                            <div class="item-image">
+                                {item.image}
                             </div>
-                            <div class="item-controls">
+
+                            <div class="item-info">
+                                <h3>{item.name}</h3>
+                                <p class="price">${item.price}</p>
+                            </div>
+
+                            <div class="quantity-controls">
                                 <button
                                     class="qty-btn"
-                                    on:click={() => decrement(item)}>-</button
+                                    on:click={() => decrement(item)}>−</button
                                 >
                                 <span class="qty">{item.quantity}</span>
                                 <button
@@ -54,185 +81,264 @@
                             </div>
                         </div>
                     {/each}
-                {/if}
-            </div>
-
-            <div class="modal-footer">
-                <div class="total-row">
-                    <span>Total</span>
-                    <span class="total-price">${total.toFixed(2)}</span>
                 </div>
-                <button class="checkout-btn" disabled={$cart.length === 0}>
-                    Checkout
-                </button>
+            {/if}
+        </div>
+
+        <div class="drawer-footer">
+            <div class="total-row">
+                <span class="label">Total</span>
+                <span class="value">${total.toFixed(2)}</span>
             </div>
+            <button class="checkout-btn" disabled={$cart.length === 0}>
+                Go to Checkout
+            </button>
         </div>
     </div>
 {/if}
 
 <style>
-    .modal-backdrop {
+    .drawer-backdrop {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
+        background-color: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(4px);
+        z-index: 2000;
     }
 
-    .modal-content {
-        background-color: white;
-        padding: 24px;
-        border-radius: 20px;
-        width: 90%;
+    .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
         max-width: 400px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        max-height: 80vh;
+        height: 100%;
+        background-color: var(--bg-color);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+        z-index: 2001;
         display: flex;
         flex-direction: column;
     }
 
-    .modal-header {
+    .drawer-header {
+        padding: 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .modal-header h2 {
+    .drawer-header h2 {
         margin: 0;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
+    }
+
+    .count {
+        color: var(--text-secondary);
+        font-weight: 500;
         font-size: 20px;
-        font-weight: 700;
     }
 
     .close-btn {
-        background: none;
+        background: var(--bg-secondary);
         border: none;
-        font-size: 24px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        color: #666;
+        transition: all 0.2s;
+        color: var(--text-primary);
     }
 
-    .cart-items {
+    .close-btn:hover {
+        background-color: var(--bg-tertiary);
+        transform: rotate(90deg);
+    }
+
+    .drawer-body {
         flex: 1;
         overflow-y: auto;
-        margin-bottom: 20px;
+        padding: 24px;
     }
 
-    .empty-cart {
+    /* Empty State */
+    .empty-state {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        padding: 40px 0;
-        color: #888;
+        color: var(--text-secondary);
     }
 
     .empty-icon {
-        font-size: 48px;
-        display: block;
-        margin-bottom: 10px;
-    }
-
-    .cart-item {
-        display: flex;
-        align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .item-image {
-        font-size: 24px;
-        width: 40px;
-        height: 40px;
-        background: #f5f5f5;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-    }
-
-    .item-details {
-        flex: 1;
-    }
-
-    .item-details h3 {
-        margin: 0;
-        font-size: 15px;
-        font-weight: 600;
-    }
-
-    .item-price {
-        margin: 4px 0 0;
-        font-size: 13px;
-        color: #666;
-    }
-
-    .item-controls {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: #f5f5f5;
-        padding: 4px;
-        border-radius: 20px;
-    }
-
-    .qty-btn {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        border: none;
-        background: white;
-        cursor: pointer;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .qty {
-        font-size: 13px;
-        font-weight: 600;
-        min-width: 16px;
-        text-align: center;
-    }
-
-    .modal-footer {
-        border-top: 1px solid #eee;
-        padding-top: 20px;
-    }
-
-    .total-row {
-        display: flex;
-        justify-content: space-between;
-        font-weight: 700;
-        font-size: 18px;
+        font-size: 64px;
         margin-bottom: 16px;
+        opacity: 0.5;
     }
 
-    .checkout-btn {
-        width: 100%;
-        padding: 14px;
-        background-color: #e31837;
+    .empty-state h3 {
+        font-size: 20px;
+        color: var(--text-primary);
+        margin: 0 0 8px 0;
+    }
+
+    .start-shopping-btn {
+        margin-top: 24px;
+        padding: 12px 24px;
+        background-color: var(--primary-color);
         color: white;
         border: none;
-        border-radius: 12px;
-        font-size: 16px;
+        border-radius: var(--radius-pill);
         font-weight: 600;
         cursor: pointer;
         transition: background-color 0.2s;
     }
 
+    .start-shopping-btn:hover {
+        background-color: var(--primary-hover);
+    }
+
+    /* Cart Items */
+    .cart-items {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background-color: var(--bg-secondary);
+        border-radius: var(--radius-md);
+        gap: 16px;
+    }
+
+    .item-image {
+        width: 64px;
+        height: 64px;
+        background-color: white;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-info h3 {
+        margin: 0 0 4px 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .item-info .price {
+        margin: 0;
+        font-size: 14px;
+        color: var(--text-secondary);
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: var(--radius-pill);
+        padding: 4px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .qty-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+    }
+
+    .qty-btn:hover {
+        background-color: var(--bg-tertiary);
+    }
+
+    .qty {
+        min-width: 24px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* Footer */
+    .drawer-footer {
+        padding: 24px;
+        border-top: 1px solid var(--border-color);
+        background-color: var(--bg-color);
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .total-row .label {
+        font-size: 18px;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .total-row .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 16px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--radius-pill);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
+    }
+
     .checkout-btn:disabled {
-        background-color: #ccc;
+        background-color: var(--bg-tertiary);
+        color: var(--text-secondary);
         cursor: not-allowed;
+        box-shadow: none;
     }
 
     .checkout-btn:not(:disabled):hover {
-        background-color: #c4122d;
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 69, 0, 0.3);
     }
 </style>

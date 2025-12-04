@@ -26,14 +26,15 @@
 <section class="hero-container">
     <!-- Category Pills Navigation -->
     <div class="category-section">
-        <h2>Categories</h2>
         <div class="category-nav">
             {#each categories as category}
                 <button
                     class="category-pill"
                     on:click={() => handleCategoryClick(category)}
                 >
-                    <span class="icon">{category.icon}</span>
+                    <div class="icon-wrapper">
+                        <span class="icon">{category.icon}</span>
+                    </div>
                     <span class="label">{category.name}</span>
                 </button>
             {/each}
@@ -48,7 +49,6 @@
             <button class="cta-btn">Order Now</button>
         </div>
         <div class="banner-image">
-            <!-- Placeholder for a delicious food image -->
             <div class="food-emoji">🍕🥗🍔</div>
         </div>
     </div>
@@ -60,21 +60,15 @@
     }
 
     .category-section {
-        margin-bottom: 24px;
-    }
-
-    .category-section h2 {
-        font-size: 24px;
-        color: var(--secondary-color);
-        margin-bottom: 16px;
+        margin-bottom: 32px;
     }
 
     /* Category Navigation */
     .category-nav {
         display: flex;
-        gap: 12px;
+        gap: 16px;
         overflow-x: auto;
-        padding: 4px 4px 20px 4px; /* Added padding to avoid cutting off shadows/borders */
+        padding: 4px 4px 20px 4px;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
     }
@@ -88,52 +82,59 @@
         flex-direction: column;
         align-items: center;
         gap: 8px;
-        min-width: 80px;
+        min-width: 72px;
         background: none;
         border: none;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: all 0.2s;
     }
 
     .category-pill:hover {
         transform: translateY(-2px);
     }
 
-    .category-pill .icon {
-        width: 60px;
-        height: 60px;
-        background-color: var(--bg-secondary);
-        border-radius: var(--radius-md);
+    .icon-wrapper {
+        width: 64px;
+        height: 64px;
+        background-color: var(--bg-color);
+        border-radius: 20px; /* Squircle */
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 28px;
-        transition:
-            background-color 0.2s,
-            border-color 0.2s;
-        border: 1px solid #808080; /* Deep gray border */
+        font-size: 32px;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
+        border: 1px solid var(--border-color);
     }
 
-    .category-pill:hover .icon {
-        background-color: var(--bg-tertiary);
+    .category-pill:hover .icon-wrapper {
+        background-color: var(--bg-color);
         border-color: var(--primary-color);
+        box-shadow: var(--shadow-md);
     }
 
     .category-pill .label {
         font-size: 13px;
         font-weight: 600;
+        color: var(--text-primary);
     }
 
     /* Banner */
     .banner {
-        background-color: #fdf4f5; /* Light Red/Pink tint */
+        background: linear-gradient(
+            135deg,
+            #ff9a9e 0%,
+            #fecfef 99%,
+            #fecfef 100%
+        );
         border-radius: var(--radius-lg);
-        padding: 40px 60px;
+        padding: 48px 64px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: relative;
         overflow: hidden;
+        box-shadow: var(--shadow-md);
     }
 
     .banner-content {
@@ -142,32 +143,39 @@
     }
 
     h1 {
-        font-size: 48px;
-        color: var(--secondary-color);
-        margin-bottom: 12px;
+        font-size: 56px;
+        font-weight: 800;
+        color: #2d3436;
+        margin: 0 0 16px 0;
         line-height: 1.1;
+        letter-spacing: -0.02em;
     }
 
     p {
-        font-size: 18px;
-        color: var(--text-secondary);
-        margin-bottom: 24px;
+        font-size: 20px;
+        color: #636e72;
+        margin: 0 0 32px 0;
+        font-weight: 500;
     }
 
     .cta-btn {
-        background-color: var(--primary-color);
+        background-color: var(--secondary-color);
         color: white;
         border: none;
-        padding: 12px 32px;
+        padding: 16px 40px;
         border-radius: var(--radius-pill);
         font-size: 16px;
         font-weight: 700;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .cta-btn:hover {
-        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
     .banner-image {
@@ -175,20 +183,20 @@
     }
 
     .food-emoji {
-        font-size: 120px;
-        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+        font-size: 140px;
+        filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
         animation: float 6s ease-in-out infinite;
     }
 
     @keyframes float {
         0% {
-            transform: translateY(0px);
+            transform: translateY(0px) rotate(0deg);
         }
         50% {
-            transform: translateY(-15px);
+            transform: translateY(-20px) rotate(2deg);
         }
         100% {
-            transform: translateY(0px);
+            transform: translateY(0px) rotate(0deg);
         }
     }
 
@@ -196,8 +204,8 @@
         .banner {
             flex-direction: column-reverse;
             text-align: center;
-            padding: 30px 20px;
-            gap: 20px;
+            padding: 40px 24px;
+            gap: 32px;
         }
 
         .banner-content {
@@ -205,11 +213,15 @@
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 36px;
+        }
+
+        p {
+            font-size: 16px;
         }
 
         .food-emoji {
-            font-size: 80px;
+            font-size: 100px;
         }
     }
 </style>

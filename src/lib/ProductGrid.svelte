@@ -122,23 +122,25 @@
     }
 
     h2 {
-        font-size: 24px;
-        color: var(--secondary-color);
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
     }
 
     .see-all {
-        color: var(--text-secondary);
+        color: var(--primary-color);
         text-decoration: none;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 14px;
         padding: 8px 16px;
-        background-color: var(--bg-secondary);
+        background-color: rgba(255, 69, 0, 0.1);
         border-radius: var(--radius-pill);
-        transition: background-color 0.2s;
+        transition: all 0.2s;
     }
 
     .see-all:hover {
-        background-color: var(--bg-tertiary);
+        background-color: rgba(255, 69, 0, 0.15);
     }
 
     .grid {
@@ -149,23 +151,22 @@
 
     .product-card {
         background-color: var(--bg-color);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-lg);
         overflow: hidden;
         cursor: pointer;
-        transition:
-            transform 0.2s,
-            box-shadow 0.2s;
-        border: 1px solid #808080; /* Deep gray border */
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border: 1px solid transparent;
+        box-shadow: var(--shadow-sm);
     }
 
     .product-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--primary-color); /* Optional: Highlight on hover */
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(0, 0, 0, 0.05);
     }
 
     .image-container {
-        height: 180px;
+        height: 200px;
         background-color: var(--bg-secondary);
         display: flex;
         align-items: center;
@@ -174,50 +175,53 @@
     }
 
     .food-emoji {
-        font-size: 80px;
-        transition: transform 0.3s;
+        font-size: 96px;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
     }
 
     .product-card:hover .food-emoji {
-        transform: scale(1.1);
+        transform: scale(1.15) rotate(5deg);
     }
 
     .rating-badge {
         position: absolute;
         bottom: 12px;
         right: 12px;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 4px 8px;
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 6px 10px;
         border-radius: var(--radius-pill);
         display: flex;
         align-items: center;
         gap: 4px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         box-shadow: var(--shadow-sm);
+        backdrop-filter: blur(4px);
     }
 
     .star {
-        color: #ffd700;
+        color: var(--accent-color);
     }
 
     .add-btn {
         position: absolute;
         top: 12px;
         right: 12px;
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         background-color: white;
-        border: 2px solid var(--primary-color); /* Red circular border */
+        border: none;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         opacity: 0;
         transform: scale(0.8);
-        transition: all 0.2s;
-        box-shadow: var(--shadow-sm);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: var(--shadow-md);
+        color: var(--primary-color);
     }
 
     .product-card:hover .add-btn {
@@ -231,33 +235,35 @@
     }
 
     .plus {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 300;
         line-height: 1;
     }
 
     .info {
-        padding: 16px 12px;
+        padding: 20px;
     }
 
     .header-row h3 {
-        font-size: 16px;
-        margin-bottom: 4px;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
         color: var(--text-primary);
     }
 
     .meta-row {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         font-size: 13px;
         color: var(--text-secondary);
-        margin-bottom: 8px;
+        margin-bottom: 16px;
+        font-weight: 500;
     }
 
     .price-row .price {
-        font-size: 15px;
-        font-weight: 600;
+        font-size: 18px;
+        font-weight: 800;
         color: var(--text-primary);
     }
 </style>
