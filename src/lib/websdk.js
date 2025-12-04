@@ -236,16 +236,20 @@ export function sendCategoryView(categoryName) {
 
 export function sendAddToCart(product) {
     const payload = {
-        eventType: "cart",
-        interactionName: "AddToCart",
-        category: "Engagement",
-        catalogObjectType: "Product",
-        catalogObjectId: product.name, // Using name as requested
-        quantity: 1,
-        price: product.price,
-        currency: "USD"
+        lineItem: {
+            catalogObjectType: "Product",
+            catalogObjectId: product.name, // Using name as requested
+            quantity: 1,
+            price: product.price,
+            currency: "USD",
+            attributes: product.attributes || {} // Include attributes if present
+        }
     };
-    return sendEvent("cart", payload);
+    // @ts-ignore
+    const interactionName = window.SalesforceInteractions.CartInteractionName.AddToCart;
+
+    console.log("Interaction name:", interactionName);
+    console.log("Payload:", payload);
+
+    return sendEvent(interactionName, payload);
 }
-
-
