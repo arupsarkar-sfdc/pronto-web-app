@@ -6,19 +6,27 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import 'dotenv/config'; // Load .env file
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+const TOKEN_ENDPOINT = process.env.TOKEN_ENDPOINT_URL || 'https://acme-dcunited-connector-app-58a61db33e61.herokuapp.com';
+const SALESFORCE_PROXY_URL = process.env.SALESFORCE_PROXY_URL || 'https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com';
 
 // Proxy for Token
 app.use('/get-token', createProxyMiddleware({
-    target: 'https://acme-dcunited-connector-app-58a61db33e61.herokuapp.com',
+    target: TOKEN_ENDPOINT,
     changeOrigin: true,
     secure: false,
+    // Ensure the path is forwarded correctly
+    pathRewrite: {
+        '^/get-token': '/get-token', // Rewrite /get-token to /get-token (redundant but explicit)
+    }
 }));
 
 // Proxy for Salesforce API
 app.use('/api', createProxyMiddleware({
-    target: 'https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com',
+    target: SALESFORCE_PROXY_URL,
     changeOrigin: true,
     secure: false,
 }));
