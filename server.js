@@ -13,6 +13,82 @@ const PORT = process.env.PORT || 3000;
 const TOKEN_ENDPOINT = process.env.TOKEN_ENDPOINT_URL || 'https://acme-dcunited-connector-app-58a61db33e61.herokuapp.com';
 const SALESFORCE_PROXY_URL = process.env.SALESFORCE_PROXY_URL || 'https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com';
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// In-memory OTP Store: Map<userId, { code: string, expires: number }>
+const otpStore = new Map();
+
+// Helper to send Slack notification
+async function sendSlackNotification(message) {
+    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    if (!webhookUrl) {
+        console.warn('[Slack] No webhook URL configured. OTP:', message);
+        return;
+    }
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: message })
+        });
+        if (!response.ok) {
+            console.error('[Slack] Failed to send notification:', response.statusText);
+        }
+    } catch (error) {
+        console.error('[Slack] Error sending notification:', error);
+    }
+}
+
+// Endpoint: Send OTP
+app.post('/api/send-otp', async (req, res) => {
+    const { userId } = req.body;
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = Date.now() + 5 * 60 * 1000; // 5 minutes
+
+    // Store OTP
+    otpStore.set(userId, { code: otp, expires });
+
+    // Send to Slack
+    const message = `🔐 Admin Access Request\nUser: *${userId}*\nOTP: *${otp}*\nExpires in 5 minutes.`;
+    await sendSlackNotification(message);
+
+    console.log(`[OTP] Generated for ${userId}: ${otp}`); // Log for debugging if Slack fails
+    res.json({ success: true, message: 'OTP sent to Slack' });
+});
+
+// Endpoint: Verify OTP
+app.post('/api/verify-otp', (req, res) => {
+    const { userId, otp } = req.body;
+    if (!userId || !otp) {
+        return res.status(400).json({ error: 'User ID and OTP are required' });
+    }
+
+    const record = otpStore.get(userId);
+    if (!record) {
+        return res.status(400).json({ error: 'No OTP found for this user' });
+    }
+
+    if (Date.now() > record.expires) {
+        otpStore.delete(userId);
+        return res.status(400).json({ error: 'OTP has expired' });
+    }
+
+    if (record.code !== otp) {
+        return res.status(400).json({ error: 'Invalid OTP' });
+    }
+
+    // Success - clear OTP
+    otpStore.delete(userId);
+    res.json({ success: true, message: 'OTP verified' });
+});
+
 // Proxy for Token
 app.use('/get-token', createProxyMiddleware({
     target: TOKEN_ENDPOINT,

@@ -34,6 +34,68 @@
     let viewMode = "structured"; // 'json' | 'structured'
     let selectedSectionId = "profile"; // Default section
 
+    // OTP / Authentication State
+    let isAuthenticated = false;
+    let loginStep = "request"; // 'request' | 'verify'
+    let loginUserId = "";
+    let loginOtp = "";
+    let loginError = null;
+    let isLoginLoading = false;
+
+    async function requestOtp() {
+        if (!loginUserId) {
+            loginError = "Please enter your User ID/Email.";
+            return;
+        }
+        isLoginLoading = true;
+        loginError = null;
+        try {
+            const res = await fetch("/api/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: loginUserId }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                loginStep = "verify";
+            } else {
+                loginError = data.error || "Failed to send OTP.";
+            }
+        } catch (e) {
+            loginError = "Network error. Please try again.";
+            console.error(e);
+        } finally {
+            isLoginLoading = false;
+        }
+    }
+
+    async function verifyOtp() {
+        if (!loginOtp) {
+            loginError = "Please enter the OTP.";
+            return;
+        }
+        isLoginLoading = true;
+        loginError = null;
+        try {
+            const res = await fetch("/api/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: loginUserId, otp: loginOtp }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                isAuthenticated = true;
+            } else {
+                loginError = data.error || "Invalid OTP.";
+            }
+        } catch (e) {
+            loginError = "Network error. Please try again.";
+            console.error(e);
+        } finally {
+            isLoginLoading = false;
+        }
+    }
+
     async function handleGetToken() {
         isLoading = true;
         error = null;
@@ -276,387 +338,610 @@
 </script>
 
 <div class="admin-page" in:fade={{ duration: 300 }}>
-    <div class="admin-container">
-        <!-- Top Section: Configuration (Token & Device) -->
-        <div
-            class="token-section"
-            in:fly={{ y: 20, duration: 400, delay: 100 }}
-        >
-            <div class="config-row">
-                <div class="input-wrapper">
-                    <label class="input-label">Token Endpoint</label>
-                    <div class="input-group">
-                        <input
-                            type="text"
-                            bind:value={$tokenEndpoint}
-                            class="token-input"
-                            placeholder="Enter Token Endpoint"
-                        />
-                        <button
-                            class="get-token-btn"
-                            on:click={handleGetToken}
-                            disabled={isLoading}
+    {#if !isAuthenticated}
+        <div class="login-overlay" in:fade>
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-icon">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><rect
+                                x="3"
+                                y="11"
+                                width="18"
+                                height="11"
+                                rx="2"
+                                ry="2"
+                            ></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"
+                            ></path></svg
                         >
-                            <span
-                                >{isLoading ? "Fetching..." : "Get Token"}</span
-                            >
-                            {#if !isLoading}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path d="M5 12h14M12 5l7 7-7 7" /></svg
-                                >
-                            {/if}
-                        </button>
                     </div>
+                    <h2>Admin Access</h2>
+                    <p>Please authenticate to continue.</p>
                 </div>
 
-                <div class="input-wrapper">
-                    <label class="input-label">Device ID</label>
-                    <div class="input-group">
-                        <input
-                            type="text"
-                            bind:value={$sourceRecordId}
-                            class="token-input"
-                            placeholder="Enter Device ID"
-                        />
-                    </div>
+                <div class="login-body">
+                    {#if loginStep === "request"}
+                        <div class="input-group">
+                            <label for="userId">User ID / Email</label>
+                            <input
+                                type="text"
+                                id="userId"
+                                bind:value={loginUserId}
+                                placeholder="e.g. admin@pronto.com"
+                                on:keydown={(e) =>
+                                    e.key === "Enter" && requestOtp()}
+                            />
+                        </div>
+                        <button
+                            class="login-btn"
+                            on:click={requestOtp}
+                            disabled={isLoginLoading}
+                        >
+                            {isLoginLoading ? "Sending..." : "Send OTP"}
+                        </button>
+                    {:else}
+                        <div class="input-group">
+                            <label for="otp">Enter OTP</label>
+                            <input
+                                type="text"
+                                id="otp"
+                                bind:value={loginOtp}
+                                placeholder="6-digit code"
+                                maxlength="6"
+                                on:keydown={(e) =>
+                                    e.key === "Enter" && verifyOtp()}
+                            />
+                            <div class="otp-hint">Sent to Slack channel</div>
+                        </div>
+                        <button
+                            class="login-btn"
+                            on:click={verifyOtp}
+                            disabled={isLoginLoading}
+                        >
+                            {isLoginLoading ? "Verifying..." : "Verify Code"}
+                        </button>
+                        <button
+                            class="link-btn"
+                            on:click={() => (loginStep = "request")}
+                            >Back</button
+                        >
+                    {/if}
+
+                    {#if loginError}
+                        <div class="login-error" in:fade>{loginError}</div>
+                    {/if}
                 </div>
             </div>
-
-            <!-- Token Details (Compact) -->
-            {#if $authToken}
-                <div class="token-details-compact" in:fade>
-                    <div class="detail-item">
-                        <span class="detail-label">Last 8:</span>
-                        <span class="detail-value"
-                            >{$authToken ? $authToken.last8Digits : "..."}</span
-                        >
-                    </div>
-                    <div class="detail-divider"></div>
-                    <div class="detail-item">
-                        <span class="detail-label">Expires:</span>
-                        <span class="detail-value"
-                            >{$authToken
-                                ? $authToken.formattedExpiration
-                                : "..."}</span
-                        >
-                    </div>
-                </div>
-            {/if}
         </div>
-
-        <!-- Bottom Section: Data Graph Payload -->
-        {#if $authToken}
+    {:else}
+        <div class="admin-container">
+            <!-- Top Section: Configuration (Token & Device) -->
             <div
-                class="payload-section"
-                in:fly={{ y: 20, duration: 400, delay: 200 }}
+                class="token-section"
+                in:fly={{ y: 20, duration: 400, delay: 100 }}
             >
-                <div class="payload-header">
-                    <div class="header-left">
-                        <h3>Payload</h3>
-                        {#if $fetchedPayloadData}
-                            <div class="toggle-container">
-                                <button
-                                    class="toggle-btn {viewMode === 'json'
-                                        ? 'active'
-                                        : ''}"
-                                    on:click={() => (viewMode = "json")}
-                                    >JSON</button
+                <div class="config-row">
+                    <div class="input-wrapper">
+                        <label class="input-label">Token Endpoint</label>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                bind:value={$tokenEndpoint}
+                                class="token-input"
+                                placeholder="Enter Token Endpoint"
+                            />
+                            <button
+                                class="get-token-btn"
+                                on:click={handleGetToken}
+                                disabled={isLoading}
+                            >
+                                <span
+                                    >{isLoading
+                                        ? "Fetching..."
+                                        : "Get Token"}</span
                                 >
-                                <button
-                                    class="toggle-btn {viewMode === 'structured'
-                                        ? 'active'
-                                        : ''}"
-                                    on:click={() => (viewMode = "structured")}
-                                    >Structured</button
-                                >
-                            </div>
-                        {/if}
+                                {#if !isLoading}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        ><path d="M5 12h14M12 5l7 7-7 7" /></svg
+                                    >
+                                {/if}
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="header-right">
-                        {#if $fetchedPayloadData && viewMode === "structured"}
-                            <select
-                                bind:value={selectedSectionId}
-                                class="section-select"
-                            >
-                                {#each extractSections($fetchedPayloadData) as section}
-                                    <option value={section.id}
-                                        >{section.title}</option
-                                    >
-                                {/each}
-                            </select>
-                        {/if}
-                        <button
-                            class="fetch-payload-btn"
-                            on:click={handleFetchPayload}
-                            disabled={isPayloadLoading}
-                        >
-                            <span
-                                >{isPayloadLoading
-                                    ? "Fetching..."
-                                    : "Fetch"}</span
-                            >
-                            {#if !isPayloadLoading}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    ><path
-                                        d="M21 12V7H5a2 2 0 0 1 0-4h14v4"
-                                    /><path
-                                        d="M3 5v14a2 2 0 0 0 2 2h16v-5"
-                                    /><path
-                                        d="M18 12a2 2 0 0 0 0 4h4v-4Z"
-                                    /></svg
-                                >
-                            {/if}
-                        </button>
+                    <div class="input-wrapper">
+                        <label class="input-label">Device ID</label>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                bind:value={$sourceRecordId}
+                                class="token-input"
+                                placeholder="Enter Device ID"
+                            />
+                        </div>
                     </div>
                 </div>
-                <div class="payload-content">
-                    {#if isPayloadLoading}
-                        <div class="placeholder-text">
-                            Loading Data Graph...
+
+                <!-- Token Details (Compact) -->
+                {#if $authToken}
+                    <div class="token-details-compact" in:fade>
+                        <div class="detail-item">
+                            <span class="detail-label">Last 8:</span>
+                            <span class="detail-value"
+                                >{$authToken
+                                    ? $authToken.last8Digits
+                                    : "..."}</span
+                            >
                         </div>
-                    {:else if payloadError}
-                        <div class="error-text">Error: {payloadError}</div>
-                    {:else if $fetchedPayloadData}
-                        {#if viewMode === "json"}
-                            <pre>{JSON.stringify(
-                                    $fetchedPayloadData,
-                                    null,
-                                    2,
-                                )}</pre>
-                        {:else}
-                            <div class="data-grid single-col">
-                                {#each extractSections($fetchedPayloadData) as section}
-                                    {#if section.id === selectedSectionId}
-                                        <div
-                                            class="data-box"
-                                            in:fade={{ duration: 200 }}
+                        <div class="detail-divider"></div>
+                        <div class="detail-item">
+                            <span class="detail-label">Expires:</span>
+                            <span class="detail-value"
+                                >{$authToken
+                                    ? $authToken.formattedExpiration
+                                    : "..."}</span
+                            >
+                        </div>
+                    </div>
+                {/if}
+            </div>
+
+            <!-- Bottom Section: Data Graph Payload -->
+            {#if $authToken}
+                <div
+                    class="payload-section"
+                    in:fly={{ y: 20, duration: 400, delay: 200 }}
+                >
+                    <div class="payload-header">
+                        <div class="header-left">
+                            <h3>Payload</h3>
+                            {#if $fetchedPayloadData}
+                                <div class="toggle-container">
+                                    <button
+                                        class="toggle-btn {viewMode === 'json'
+                                            ? 'active'
+                                            : ''}"
+                                        on:click={() => (viewMode = "json")}
+                                        >JSON</button
+                                    >
+                                    <button
+                                        class="toggle-btn {viewMode ===
+                                        'structured'
+                                            ? 'active'
+                                            : ''}"
+                                        on:click={() =>
+                                            (viewMode = "structured")}
+                                        >Structured</button
+                                    >
+                                </div>
+                            {/if}
+                        </div>
+
+                        <div class="header-right">
+                            {#if $fetchedPayloadData && viewMode === "structured"}
+                                <select
+                                    bind:value={selectedSectionId}
+                                    class="section-select"
+                                >
+                                    {#each extractSections($fetchedPayloadData) as section}
+                                        <option value={section.id}
+                                            >{section.title}</option
                                         >
-                                            <div class="box-header">
-                                                <div class="box-icon">
-                                                    {#if section.icon === "user"}
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            ><path
-                                                                d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
-                                                            /><circle
-                                                                cx="12"
-                                                                cy="7"
-                                                                r="4"
-                                                            /></svg
-                                                        >
-                                                    {:else if section.icon === "cart"}
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            ><circle
-                                                                cx="9"
-                                                                cy="21"
-                                                                r="1"
-                                                            /><circle
-                                                                cx="20"
-                                                                cy="21"
-                                                                r="1"
-                                                            /><path
-                                                                d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-                                                            /></svg
-                                                        >
-                                                    {:else if section.icon === "eye"}
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            ><path
-                                                                d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
-                                                            /><circle
-                                                                cx="12"
-                                                                cy="12"
-                                                                r="3"
-                                                            /></svg
-                                                        >
-                                                    {:else if section.icon === "mail"}
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            ><rect
-                                                                width="20"
-                                                                height="16"
-                                                                x="2"
-                                                                y="4"
-                                                                rx="2"
-                                                            /><path
-                                                                d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
-                                                            /></svg
-                                                        >
+                                    {/each}
+                                </select>
+                            {/if}
+                            <button
+                                class="fetch-payload-btn"
+                                on:click={handleFetchPayload}
+                                disabled={isPayloadLoading}
+                            >
+                                <span
+                                    >{isPayloadLoading
+                                        ? "Fetching..."
+                                        : "Fetch"}</span
+                                >
+                                {#if !isPayloadLoading}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        ><path
+                                            d="M21 12V7H5a2 2 0 0 1 0-4h14v4"
+                                        /><path
+                                            d="M3 5v14a2 2 0 0 0 2 2h16v-5"
+                                        /><path
+                                            d="M18 12a2 2 0 0 0 0 4h4v-4Z"
+                                        /></svg
+                                    >
+                                {/if}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="payload-content">
+                        {#if isPayloadLoading}
+                            <div class="placeholder-text">
+                                Loading Data Graph...
+                            </div>
+                        {:else if payloadError}
+                            <div class="error-text">Error: {payloadError}</div>
+                        {:else if $fetchedPayloadData}
+                            {#if viewMode === "json"}
+                                <pre>{JSON.stringify(
+                                        $fetchedPayloadData,
+                                        null,
+                                        2,
+                                    )}</pre>
+                            {:else}
+                                <div class="data-grid single-col">
+                                    {#each extractSections($fetchedPayloadData) as section}
+                                        {#if section.id === selectedSectionId}
+                                            <div
+                                                class="data-box"
+                                                in:fade={{ duration: 200 }}
+                                            >
+                                                <div class="box-header">
+                                                    <div class="box-icon">
+                                                        {#if section.icon === "user"}
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="18"
+                                                                height="18"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                ><path
+                                                                    d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
+                                                                /><circle
+                                                                    cx="12"
+                                                                    cy="7"
+                                                                    r="4"
+                                                                /></svg
+                                                            >
+                                                        {:else if section.icon === "cart"}
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="18"
+                                                                height="18"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                ><circle
+                                                                    cx="9"
+                                                                    cy="21"
+                                                                    r="1"
+                                                                /><circle
+                                                                    cx="20"
+                                                                    cy="21"
+                                                                    r="1"
+                                                                /><path
+                                                                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                                                                /></svg
+                                                            >
+                                                        {:else if section.icon === "eye"}
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="18"
+                                                                height="18"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                ><path
+                                                                    d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                                                                /><circle
+                                                                    cx="12"
+                                                                    cy="12"
+                                                                    r="3"
+                                                                /></svg
+                                                            >
+                                                        {:else if section.icon === "mail"}
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="18"
+                                                                height="18"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                ><rect
+                                                                    width="20"
+                                                                    height="16"
+                                                                    x="2"
+                                                                    y="4"
+                                                                    rx="2"
+                                                                /><path
+                                                                    d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                                                                /></svg
+                                                            >
+                                                        {:else}
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="18"
+                                                                height="18"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="2"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                ><polyline
+                                                                    points="16 18 22 12 16 6"
+                                                                /><polyline
+                                                                    points="8 6 2 12 8 18"
+                                                                /></svg
+                                                            >
+                                                        {/if}
+                                                    </div>
+                                                    <h4>{section.title}</h4>
+                                                </div>
+                                                <div class="box-body">
+                                                    {#if section.type === "key-value"}
+                                                        <div class="kv-list">
+                                                            {#each Object.entries(section.data) as [key, value]}
+                                                                <div
+                                                                    class="kv-item"
+                                                                >
+                                                                    <span
+                                                                        class="kv-key"
+                                                                        >{formatKey(
+                                                                            key,
+                                                                        )}</span
+                                                                    >
+                                                                    <div
+                                                                        class="kv-value-wrapper"
+                                                                    >
+                                                                        <RecursiveValue
+                                                                            {value}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            {/each}
+                                                        </div>
+                                                    {:else if section.type === "list"}
+                                                        <div class="item-list">
+                                                            {#each section.data as item}
+                                                                <div
+                                                                    class="list-item"
+                                                                >
+                                                                    {#each Object.entries(item) as [key, value]}
+                                                                        <div
+                                                                            class="kv-item compact"
+                                                                        >
+                                                                            <span
+                                                                                class="kv-key"
+                                                                                >{formatKey(
+                                                                                    key,
+                                                                                )}</span
+                                                                            >
+                                                                            <div
+                                                                                class="kv-value-wrapper"
+                                                                            >
+                                                                                <RecursiveValue
+                                                                                    {value}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    {/each}
+                                                                </div>
+                                                            {/each}
+                                                        </div>
                                                     {:else}
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="18"
-                                                            height="18"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            ><polyline
-                                                                points="16 18 22 12 16 6"
-                                                            /><polyline
-                                                                points="8 6 2 12 8 18"
-                                                            /></svg
-                                                        >
+                                                        <pre>{JSON.stringify(
+                                                                section.data,
+                                                                null,
+                                                                2,
+                                                            )}</pre>
                                                     {/if}
                                                 </div>
-                                                <h4>{section.title}</h4>
                                             </div>
-                                            <div class="box-body">
-                                                {#if section.type === "key-value"}
-                                                    <div class="kv-list">
-                                                        {#each Object.entries(section.data) as [key, value]}
-                                                            <div
-                                                                class="kv-item"
-                                                            >
-                                                                <span
-                                                                    class="kv-key"
-                                                                    >{formatKey(
-                                                                        key,
-                                                                    )}</span
-                                                                >
-                                                                <div
-                                                                    class="kv-value-wrapper"
-                                                                >
-                                                                    <RecursiveValue
-                                                                        {value}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        {/each}
-                                                    </div>
-                                                {:else if section.type === "list"}
-                                                    <div class="item-list">
-                                                        {#each section.data as item}
-                                                            <div
-                                                                class="list-item"
-                                                            >
-                                                                {#each Object.entries(item) as [key, value]}
-                                                                    <div
-                                                                        class="kv-item compact"
-                                                                    >
-                                                                        <span
-                                                                            class="kv-key"
-                                                                            >{formatKey(
-                                                                                key,
-                                                                            )}</span
-                                                                        >
-                                                                        <div
-                                                                            class="kv-value-wrapper"
-                                                                        >
-                                                                            <RecursiveValue
-                                                                                {value}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                {/each}
-                                                            </div>
-                                                        {/each}
-                                                    </div>
-                                                {:else}
-                                                    <pre>{JSON.stringify(
-                                                            section.data,
-                                                            null,
-                                                            2,
-                                                        )}</pre>
-                                                {/if}
-                                            </div>
-                                        </div>
-                                    {/if}
-                                {/each}
+                                        {/if}
+                                    {/each}
+                                </div>
+                            {/if}
+                        {:else}
+                            <div class="placeholder-text">
+                                Click Fetch to get Data Graph.
                             </div>
                         {/if}
-                    {:else}
-                        <div class="placeholder-text">
-                            Click Fetch to get Data Graph.
-                        </div>
-                    {/if}
-                    <!--
+                        <!--
             {#if currentUser}
               <pre>{JSON.stringify(currentUser, null, 2)}</pre>
             {/if}
             -->
+                    </div>
                 </div>
-            </div>
-        {/if}
+            {/if}
 
-        <div class="actions" in:fly={{ y: 20, duration: 400, delay: 300 }}>
-            <button
-                class="back-btn"
-                on:click={() => (window.location.hash = "")}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    ><path d="M19 12H5M12 19l-7-7 7-7" /></svg
+            <div class="actions" in:fly={{ y: 20, duration: 400, delay: 300 }}>
+                <button
+                    class="back-btn"
+                    on:click={() => (window.location.hash = "")}
                 >
-                Back to App
-            </button>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M19 12H5M12 19l-7-7 7-7" /></svg
+                    >
+                    Back to App
+                </button>
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <style>
+    /* Login Overlay Styles */
+    .login-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(248, 250, 252, 0.95);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .login-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .login-header {
+        text-align: center;
+    }
+
+    .login-icon {
+        width: 48px;
+        height: 48px;
+        background: #f1f5f9;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: #0f172a;
+    }
+
+    .login-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #0f172a;
+    }
+
+    .login-header p {
+        margin: 0.5rem 0 0;
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .login-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .login-body .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .login-body label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #475569;
+    }
+
+    .login-body input {
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .login-body input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .login-btn {
+        background: #0f172a;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .login-btn:hover {
+        background: #1e293b;
+        transform: translateY(-1px);
+    }
+
+    .login-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .link-btn {
+        background: none;
+        border: none;
+        color: #64748b;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .login-error {
+        color: #ef4444;
+        font-size: 0.9rem;
+        text-align: center;
+        background: #fef2f2;
+        padding: 0.75rem;
+        border-radius: 8px;
+    }
+
+    .otp-hint {
+        font-size: 0.8rem;
+        color: #94a3b8;
+    }
+
     :global(body) {
         margin: 0;
         padding: 0;
