@@ -13,6 +13,7 @@
     import { getSDKAnonymousId } from "./websdk";
     import { onMount } from "svelte";
     import RecursiveValue from "./RecursiveValue.svelte";
+    import AnalyticsDashboard from "./AnalyticsDashboard.svelte";
 
     // Subscribe to stores to display state (keeping this for potential future use or debugging)
     let cartItems = [];
@@ -31,7 +32,7 @@
     let isPayloadLoading = false;
     let error = null;
     let payloadError = null;
-    let viewMode = "structured"; // 'json' | 'structured'
+    let viewMode = "structured"; // 'json' | 'structured' | 'analytics'
     let selectedSectionId = "profile"; // Default section
 
     // OTP / Authentication State
@@ -531,6 +532,15 @@
                                             (viewMode = "structured")}
                                         >Structured</button
                                     >
+                                    <button
+                                        class="toggle-btn {viewMode ===
+                                        'analytics'
+                                            ? 'active'
+                                            : ''}"
+                                        on:click={() =>
+                                            (viewMode = "analytics")}
+                                        >Analytics</button
+                                    >
                                 </div>
                             {/if}
                         </div>
@@ -595,6 +605,10 @@
                                         null,
                                         2,
                                     )}</pre>
+                            {:else if viewMode === "analytics"}
+                                <AnalyticsDashboard
+                                    data={$fetchedPayloadData}
+                                />
                             {:else}
                                 <div class="data-grid single-col">
                                     {#each extractSections($fetchedPayloadData) as section}
