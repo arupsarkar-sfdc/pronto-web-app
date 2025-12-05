@@ -125,7 +125,7 @@ app.use('/api', createProxyMiddleware({
     secure: false,
     logLevel: 'debug',
     pathRewrite: {
-        '^/': '/api', // Add /api back to the path since app.use strips it
+        '^/': '/api/', // Add /api/ back to the path (note the trailing slash)
     },
     onProxyReq: (proxyReq, req, res) => {
         console.log(`[API Proxy] Request: ${req.method} ${req.url} -> ${SALESFORCE_PROXY_URL}${req.url}`);
