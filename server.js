@@ -13,8 +13,16 @@ const PORT = process.env.PORT || 3000;
 const TOKEN_ENDPOINT = process.env.TOKEN_ENDPOINT_URL || 'https://acme-dcunited-connector-app-58a61db33e61.herokuapp.com';
 const SALESFORCE_PROXY_URL = process.env.SALESFORCE_PROXY_URL || 'https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com';
 
+// Global Request Logger
+app.use((req, res, next) => {
+    console.log(`[Server] ${req.method} ${req.url}`);
+    next();
+});
+
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+
 
 // In-memory OTP Store: Map<userId, { code: string, expires: number }>
 const otpStore = new Map();
@@ -95,6 +103,9 @@ app.use('/get-token', createProxyMiddleware({
     changeOrigin: true,
     secure: false,
     logLevel: 'debug',
+    pathRewrite: {
+        '^/': '/get-token', // Add /get-token back to the path since app.use strips it
+    },
     onProxyReq: (proxyReq, req, res) => {
         console.log(`[Token Proxy] Request: ${req.method} ${req.url} -> ${TOKEN_ENDPOINT}${req.url}`);
     },
@@ -135,4 +146,6 @@ app.get(/.*/, (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Token Endpoint: ${TOKEN_ENDPOINT}`);
+    console.log(`Salesforce Proxy: ${SALESFORCE_PROXY_URL}`);
 });
