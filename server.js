@@ -27,7 +27,7 @@ app.use('/api', createProxyMiddleware({
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Handle SPA routing: return index.html for all other requests
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
