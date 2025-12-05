@@ -18,9 +18,16 @@ app.use('/get-token', createProxyMiddleware({
     target: TOKEN_ENDPOINT,
     changeOrigin: true,
     secure: false,
-    // Ensure the path is forwarded correctly
-    pathRewrite: {
-        '^/get-token': '/get-token', // Rewrite /get-token to /get-token (redundant but explicit)
+    logLevel: 'debug',
+    onProxyReq: (proxyReq, req, res) => {
+        console.log(`[Token Proxy] Request: ${req.method} ${req.url} -> ${TOKEN_ENDPOINT}${req.url}`);
+    },
+    onProxyRes: (proxyRes, req, res) => {
+        console.log(`[Token Proxy] Response: ${proxyRes.statusCode} ${req.url}`);
+    },
+    onError: (err, req, res) => {
+        console.error('[Token Proxy] Error:', err);
+        res.status(500).send('Proxy Error');
     }
 }));
 
@@ -29,6 +36,17 @@ app.use('/api', createProxyMiddleware({
     target: SALESFORCE_PROXY_URL,
     changeOrigin: true,
     secure: false,
+    logLevel: 'debug',
+    onProxyReq: (proxyReq, req, res) => {
+        console.log(`[API Proxy] Request: ${req.method} ${req.url} -> ${SALESFORCE_PROXY_URL}${req.url}`);
+    },
+    onProxyRes: (proxyRes, req, res) => {
+        console.log(`[API Proxy] Response: ${proxyRes.statusCode} ${req.url}`);
+    },
+    onError: (err, req, res) => {
+        console.error('[API Proxy] Error:', err);
+        res.status(500).send('Proxy Error');
+    }
 }));
 
 // Serve static files from the dist directory
