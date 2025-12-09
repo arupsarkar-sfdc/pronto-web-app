@@ -341,6 +341,7 @@ import { authToken } from "./stores";
  * @param {string} pointName - The personalization point name (e.g. "homepage_sidebar_recs")
  * @param {object} [context={}] - Additional context (anchor, etc.)
  */
+let interactionCount = 0; // Simulate server-side learning state
 export async function getPersonalization(pointName, context = {}) {
     // 1. Construct the Request Payload
     const deviceId = getDeviceId();
@@ -349,7 +350,7 @@ export async function getPersonalization(pointName, context = {}) {
     // For debugging/demo: If we are asking for "shops", specifically force the fallback 
     // because we know we haven't configured that in Salesforce yet.
     if (pointName === "homepage_sidebar_shops") {
-        console.log(`[WebSDK] ℹ️ Skipping API for ${pointName} (Mock Mode)`);
+        console.log(`[WebSDK] ℹ️ Skipping API for ${pointName} (Mock Mode - Shops)`);
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve({
@@ -363,9 +364,77 @@ export async function getPersonalization(pointName, context = {}) {
         });
     }
 
-    // SIMULATION: Handlebars Transformer Output
-    if (pointName === "homepage_sidebar_handlebars") {
-        console.log(`[WebSDK] ℹ️ Skipping API for ${pointName} (Mock handlebars)`);
+    // Track interactions for "Learning Phase" simulation
+    if (pointName === "Pronto") {
+        interactionCount++;
+        console.log(`[WebSDK] Interaction Tracking: ${interactionCount}/5 for ${pointName}`);
+    }
+
+    const requestPayload = {
+        personalizationPoints: [
+            {
+                name: pointName,
+                id: "",
+                decisionId: ""
+            }
+        ],
+        individualId: deviceId,
+        context: {
+            ...context,
+            individualId: deviceId
+        }
+    };
+
+    // @ts-ignore
+    const BASE_URL = import.meta.env.VITE_SALESFORCE_PROXY_URL || "https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com";
+    const ENDPOINT = `${BASE_URL}/personalization/v1/decisions`;
+
+    const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    };
+
+    if (tokenData && tokenData.accessToken) {
+        headers["Authorization"] = `Bearer ${tokenData.accessToken}`;
+    }
+
+    console.log(`[WebSDK] 📡 Calling Decisioning API: POST ${ENDPOINT}`);
+    console.log(`[WebSDK] 📦 Request Payload:`, JSON.stringify(requestPayload, null, 2));
+
+    try {
+        const response = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(requestPayload)
+        });
+
+        console.log(`[WebSDK] 📥 API Response Status: ${response.status}`);
+
+        if (response.ok) {
+            const json = await response.json();
+            console.log(`[WebSDK] 📥 API Response Data:`, json);
+
+            if (json.personalizations && json.personalizations.length > 0) {
+                const firstDecision = json.personalizations[0];
+                if (firstDecision.attributes) {
+                    return {
+                        type: "PromoBanner",
+                        data: firstDecision.attributes
+                    };
+                }
+            }
+            console.warn("[WebSDK] Valid response but no actionable personalization found.");
+        } else {
+            console.warn(`[WebSDK] API Request failed. Status: ${response.status}.`);
+        }
+    } catch (error) {
+        console.error(`[WebSDK] API Network Error:`, error);
+    }
+
+    // FALLBACK / SIMULATION:
+    // If API returned nothing (or failed), AND we satisfy the demo learning threshold, return the Mock Pizza.
+    if (pointName === "Pronto" && interactionCount >= 5) {
+        console.log(`[WebSDK] ℹ️ API Empty/Failed, but Learning Threshold Met (${interactionCount}/5). Returning Mock Content.`);
 
         // Data derived from User's provided JSON
         const data = {
@@ -376,8 +445,6 @@ export async function getPersonalization(pointName, context = {}) {
             CallToActionUrl: "https://www.yelp.com/biz/cheezys-artisan-pizza-san-francisco"
         };
 
-        // Simulated Handlebars Template Execution
-        // Note: In a real environment, this style block would be scoped or prefixed to avoid conflicts.
         const mockHtml = `
             <style>
                 .hb-container {
@@ -467,77 +534,12 @@ export async function getPersonalization(pointName, context = {}) {
             </div>
         `;
 
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve({
-                    type: "HandlebarsContent",
-                    data: {
-                        html: mockHtml
-                    }
-                });
-            }, 600);
-        });
-    }
-
-    const requestPayload = {
-        personalizationPoints: [
-            {
-                name: pointName,
-                id: "",
-                decisionId: ""
-            }
-        ],
-        individualId: deviceId,
-        context: {
-            ...context,
-            individualId: deviceId
-        }
-    };
-
-    // @ts-ignore
-    const BASE_URL = import.meta.env.VITE_SALESFORCE_PROXY_URL || "https://mnrw0zbyh0yt0mldmmytqzrxg0.c360a.salesforce.com";
-    const ENDPOINT = `${BASE_URL}/personalization/v1/decisions`;
-
-    const headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    };
-
-    if (tokenData && tokenData.accessToken) {
-        headers["Authorization"] = `Bearer ${tokenData.accessToken}`;
-    }
-
-    console.log(`[WebSDK] 📡 Calling Decisioning API: POST ${ENDPOINT}`);
-    console.log(`[WebSDK] 📦 Request Payload:`, JSON.stringify(requestPayload, null, 2));
-
-    try {
-        const response = await fetch(ENDPOINT, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(requestPayload)
-        });
-
-        console.log(`[WebSDK] 📥 API Response Status: ${response.status}`);
-
-        if (response.ok) {
-            const json = await response.json();
-            console.log(`[WebSDK] 📥 API Response Data:`, json);
-
-            if (json.personalizations && json.personalizations.length > 0) {
-                const firstDecision = json.personalizations[0];
-                if (firstDecision.attributes) {
-                    return {
-                        type: "PromoBanner",
-                        data: firstDecision.attributes
-                    };
-                }
-            }
-            console.warn("[WebSDK] Valid response but no actionable personalization found.");
-        } else {
-            console.warn(`[WebSDK] API Request failed. Status: ${response.status}.`);
-        }
-    } catch (error) {
-        console.error(`[WebSDK] API Network Error:`, error);
+        return {
+            type: "HandlebarsContent",
+            data: { html: mockHtml }
+        };
+    } else if (pointName === "Pronto") {
+        console.log(`[WebSDK] ℹ️ API Empty and Threshold (${interactionCount}/5) not met. Showing Empty State.`);
     }
 
     return null;

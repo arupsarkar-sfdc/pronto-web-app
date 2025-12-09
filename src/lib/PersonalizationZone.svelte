@@ -10,6 +10,7 @@
 
     export let point; // e.g. "homepage_sidebar_top"
     export let title = ""; // Optional title for the zone container
+    export let autoLoad = true; // Default to auto-loading content
 
     // Component Registry: Maps JSON "type" to Svelte Component
     const COMPONENT_REGISTRY = {
@@ -21,11 +22,11 @@
 
     let componentToRender = null;
     let componentData = null;
-    let loading = true;
+    let loading = autoLoad; // Initial loading state depends on autoLoad
     let error = null;
 
-    // Reactive: Refetch when valid token appears or point changes
-    $: if (point || $authToken) {
+    // Reactive: Refetch when valid token appears or point changes, IF autoLoad is true
+    $: if (autoLoad && (point || $authToken)) {
         loadPersonalization();
     }
 
@@ -101,7 +102,7 @@
         <!-- Modern Empty State -->
         <div class="empty-state" in:fade>
             <div class="empty-icon">✨</div>
-            <p>Recommendations will appear here...</p>
+            <p>Recommendations will be shown here...</p>
         </div>
     {/if}
 </div>
@@ -119,30 +120,43 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem 1.5rem;
-        background-color: #f8f9fa; /* Very light gray */
-        border: 2px dashed #e9ecef; /* Dashed border for placeholder feel */
-        border-radius: 16px;
-        color: #adb5bd; /* Muted text */
+        padding: 3rem 1.5rem;
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        border: 1px dashed #dee2e6; /* Modern subtle border */
+        border-radius: 20px;
+        color: #6c757d;
         text-align: center;
         transition: all 0.3s ease;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
     }
 
     .empty-state:hover {
-        border-color: #dee2e6;
-        color: #868e96;
+        border-color: #adb5bd;
+        box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.04);
+        transform: translateY(-2px);
     }
 
     .empty-icon {
-        font-size: 24px;
-        margin-bottom: 8px;
-        opacity: 0.7;
+        font-size: 28px;
+        margin-bottom: 12px;
+        opacity: 0.5;
+        filter: grayscale(100%);
+        transition: all 0.3s ease;
+    }
+
+    .empty-state:hover .empty-icon {
+        opacity: 1;
+        filter: grayscale(0%);
+        transform: scale(1.1);
     }
 
     .empty-state p {
         margin: 0;
-        font-size: 0.9rem;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
         font-weight: 500;
+        letter-spacing: -0.01em;
+        color: #868e96;
     }
 
     .zone-header {

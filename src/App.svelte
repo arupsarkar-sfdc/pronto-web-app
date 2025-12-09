@@ -182,8 +182,9 @@
         <div class="sidebar-section">
           <!-- Simulation of Handlebars Content (Replacing original JSON version) -->
           <PersonalizationZone
-            point="homepage_sidebar_handlebars"
+            point="Pronto"
             title="Recommended for You"
+            autoLoad={false}
           />
         </div>
 
