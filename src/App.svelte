@@ -1,7 +1,8 @@
 <script>
   /* Layout Components */
-  import RecommendationsSidebar from "./lib/RecommendationsSidebar.svelte";
-  import ClosestShopsSidebar from "./lib/ClosestShopsSidebar.svelte";
+  import RecommendationsSidebar from "./lib/RecommendationsSidebar.svelte"; // Keeping just in case or remove? Actually removing mostly, but PersonalizationZone uses it. App doesn't need it direct import anymore if not used.
+  /* Removing direct imports of Sidebars from App, adding Zone */
+  import PersonalizationZone from "./lib/PersonalizationZone.svelte";
 
   // ... existing imports ...
   import { onMount } from "svelte";
@@ -173,17 +174,31 @@
     on:logout={handleLogout}
   />
 
-  <div class="content-wrapper">
-    <!-- Left Sidebar (Stacked) -->
-    <aside class="sidebar-left">
-      <div class="sidebar-section">
-        <RecommendationsSidebar on:productClick={handleRecommendationClick} />
-      </div>
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-section">
-        <ClosestShopsSidebar on:shopClick={handleShopClick} />
-      </div>
-    </aside>
+  <div class="content-wrapper" class:admin-layout={currentPage === "admin"}>
+    {#if currentPage !== "admin"}
+      <!-- Left Sidebar (Stacked) -->
+      <!-- Left Sidebar (Stacked) -->
+      <aside class="sidebar-left">
+        <div class="sidebar-section">
+          <!-- Simulation of Handlebars Content (Replacing original JSON version) -->
+          <PersonalizationZone
+            point="homepage_sidebar_handlebars"
+            title="Recommended for You"
+          />
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+          <!-- Fallback to mock loop for Shops since "Pronto" is the only active API point -->
+          <PersonalizationZone
+            point="homepage_sidebar_shops"
+            title="Stores near You"
+            on:shopClick={handleShopClick}
+          />
+        </div>
+      </aside>
+    {/if}
 
     <!-- Main Content -->
     <main>
@@ -281,30 +296,74 @@
     max-width: var(--container-width);
     margin: 0 auto;
     padding: 24px;
-    padding-top: calc(var(--header-height) + 24px);
+    padding-top: 0; /* Handled by children for precise alignment */
     box-sizing: border-box;
     flex: 1;
   }
 
+  .content-wrapper.admin-layout {
+    grid-template-columns: 1fr;
+    max-width: 1000px; /* Optional: Constrain admin width for readability */
+    padding-top: calc(
+      var(--header-height) + 24px
+    ); /* Admin doesn't have sidebar, so global padding is fine */
+  }
+
   main {
     min-width: 0; /* Prevents flex/grid blowouts */
+    padding-top: calc(
+      var(--header-height) + 8px
+    ); /* Moves main content up slightly for alignment */
   }
 
   aside.sidebar-left {
     /* Sticky Container for the whole rail */
-    height: fit-content;
-    max-height: calc(100vh - var(--header-height) - 48px);
+    height: 100vh; /* Full height to contain the padding */
     position: sticky;
-    top: calc(var(--header-height) + 24px);
+    top: 0; /* Sticks to top of viewport */
+    padding-top: calc(
+      var(--header-height) + 24px
+    ); /* Pushes content down below header */
     overflow-y: auto; /* Independent scrolling */
 
     /* Optional: Hide scrollbar for cleaner look */
     scrollbar-width: thin;
     -ms-overflow-style: none;
 
+    background: transparent; /* Remove background color from rail itself, or keep? */
+    /* Original had background white, radius lg. If height is 100vh, background looks weird. */
+    /* Let's keep original visuals but adjust positioning. */
+    /* Actually, if I change padding/height logic, the "Card" look of the sidebar might break if it was the aside itself. */
+    /* Looking at original: aside had background white. */
+    /* Using a wrapper div inside aside for the 'card' look would be safer, but for now let's assume transparent rail. */
+    /* Reverting to transparent rail notion for aside, but checking previous CSS... */
+    /* Previous: aside.sidebar-left { background: white; ... box-shadow } */
+    /* If I stretch it to 100vh, the white bar goes top to bottom. That might be ugly. */
+    /* Better approach for visuals: Keep top calc, add margin-top instead of padding? */
+    /* No, user wanted to remove padding from main. */
+    /* Let's stick to: Content Wrapper has 0 padding. */
+    /* Aside has `margin-top: calc(var(--header-height) + 24px)` ? */
+    /* If margin-top, it pushes it down. */
+    /* Main has `margin-top: calc(var(--header-height) + 8px)`. */
+    /* This preserves the Visual Box of the aside (bg white, shadow). */
+  }
+
+  aside.sidebar-left {
+    /* Restoring Visual Box properties */
+    height: fit-content;
+    max-height: calc(100vh - var(--header-height) - 48px);
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+
     background: white;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    /* No extra margin needed if Wrapper is 0 but we rely on 'top' for sticky? */
+    /* Wait, if Wrapper is 0, Layout starts at 0 (under header). */
+    /* Sticky element with top: 100px will start at 0 but stick at 100px? No. */
+    /* Relative/Static positioning places it at 0. */
+    /* We need Margin to place it initially. */
+    margin-top: calc(var(--header-height) + 24px);
   }
 
   aside.sidebar-left::-webkit-scrollbar {

@@ -65,11 +65,10 @@
     }
 
     .section-title {
-        font-family: "Handlee", cursive; /* Keeping the fun font for headers as originally intended or switching to Inter? User liked Modern, but sketches had Handlee. let's use Inter for consistency with sidebar update, or a nice header font. Using Inter per previous instruction */
         font-family: "Inter", sans-serif;
         font-weight: 800;
-        font-size: 1.5rem;
-        margin: 0 0 16px 4px;
+        font-size: 1.25rem; /* Match sidebar title size */
+        margin: 0 0 16px 4px; /* Reset margin, alignment handled by layout padding */
         color: var(--text-primary);
     }
 

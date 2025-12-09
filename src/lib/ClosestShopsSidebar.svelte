@@ -1,25 +1,11 @@
 <script>
-    import { onMount, createEventDispatcher } from "svelte";
-    import { getPersonalization } from "./websdk";
+    import { createEventDispatcher } from "svelte";
     import { fade, slide } from "svelte/transition";
 
     const dispatch = createEventDispatcher();
 
     export let title = "Closest Shops";
-    export let pointName = "closest_shops";
-
-    let shops = [];
-    let loading = true;
-
-    onMount(async () => {
-        try {
-            shops = await getPersonalization(pointName);
-        } catch (err) {
-            console.error("Failed to load shops", err);
-        } finally {
-            loading = false;
-        }
-    });
+    export let shops = []; // Received from Parent
 
     function handleShopClick(shop) {
         dispatch("shopClick", shop);
@@ -27,12 +13,8 @@
 </script>
 
 <div class="sidebar-container">
-    <h3 class="header">{title}</h3>
-
-    {#if loading}
+    {#if shops.length === 0}
         <div class="loading">Finding shops...</div>
-    {:else if shops.length === 0}
-        <div class="empty">No shops found nearby.</div>
     {:else}
         <div class="list">
             {#each shops as shop}

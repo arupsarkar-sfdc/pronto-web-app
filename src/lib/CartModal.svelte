@@ -60,7 +60,15 @@
                             transition:fly={{ y: 20, duration: 200 }}
                         >
                             <div class="item-image">
-                                {item.image}
+                                {#if item.isUrl}
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        class="cart-img"
+                                    />
+                                {:else}
+                                    {item.image}
+                                {/if}
                             </div>
 
                             <div class="item-info">
@@ -235,6 +243,13 @@
         justify-content: center;
         font-size: 32px;
         box-shadow: var(--shadow-sm);
+        overflow: hidden; /* Constrain image */
+    }
+
+    .cart-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .item-info {

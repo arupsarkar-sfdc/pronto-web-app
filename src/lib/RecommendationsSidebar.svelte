@@ -1,47 +1,28 @@
 <script>
-    import { onMount, createEventDispatcher } from "svelte";
-    import { getPersonalization } from "./websdk";
+    import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
 
     const dispatch = createEventDispatcher();
 
     export let title = "Recommended for You";
-    export let pointName = "pronto_home_recs";
+    export let products = []; // Received from Parent (PersonalizationZone)
 
-    let recommendations = [];
-    let loading = true;
-
-    onMount(async () => {
-        try {
-            recommendations = await getPersonalization(pointName);
-        } catch (err) {
-            console.error("Failed to load recommendations", err);
-        } finally {
-            loading = false;
-        }
-    });
-
-    function handleClick(item) {
-        // Dispatch event to parent
-        dispatch("productClick", item);
+    function handleProductClick(product) {
+        dispatch("productClick", product);
     }
 </script>
 
 <div class="sidebar-container">
-    <h3 class="header">{title}</h3>
-
-    {#if loading}
-        <div class="loading">Loading...</div>
-    {:else if recommendations.length === 0}
+    {#if products.length === 0}
         <div class="empty">No recommendations yet.</div>
     {:else}
         <div class="list">
-            {#each recommendations as item}
+            {#each products as item}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <div
                     class="card"
-                    on:click={() => handleClick(item)}
+                    on:click={() => handleProductClick(item)}
                     transition:fade
                 >
                     <div class="image-wrapper">
@@ -68,13 +49,30 @@
 
     .header {
         font-weight: 800;
-        color: var(--text-primary, #333);
-        margin-bottom: 2rem;
         font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+        margin: 0;
         letter-spacing: -0.02em;
-        border-bottom: 2px solid var(--primary-color, #ff4500);
-        padding-bottom: 0.5rem;
-        display: inline-block;
+    }
+
+    .refresh-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .refresh-btn:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: var(--primary-color);
+        transform: rotate(180deg);
     }
 
     .loading,
