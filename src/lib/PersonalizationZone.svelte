@@ -101,7 +101,7 @@
         <!-- Modern Empty State -->
         <div class="empty-state" in:fade>
             <div class="empty-icon">✨</div>
-            <p>Recommendations appear here...</p>
+            <p>Recommendations will appear here...</p>
         </div>
     {/if}
 </div>
