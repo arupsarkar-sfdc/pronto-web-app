@@ -259,6 +259,69 @@ export function sendAddToCart(product) {
 
     console.log("Interaction name:", interactionName);
     console.log("Payload:", payload);
-
     return sendEvent(interactionName, payload);
+}
+
+/**
+ * Mock Data for Personalization
+ */
+const MOCK_RECOMMENDATIONS = [
+    {
+        id: "rec1",
+        name: "Spicy Tacos",
+        image: "/images/spicy_tacos_1765223067041.png",
+        price: 9.99,
+        recommender: "Trending Now"
+    },
+    {
+        id: "rec2",
+        name: "Avocado Toast",
+        image: "/images/avocado_toast_1765223081385.png",
+        price: 12.50,
+        recommender: "Trending Now"
+    },
+    {
+        id: "rec3",
+        name: "Berry Smoothie",
+        image: "/images/berry_smoothie_1765223094679.png",
+        price: 6.99,
+        recommender: "Trending Now"
+    }
+];
+
+const MOCK_SHOPS = [
+    { id: "shop1", name: "Joe's Pizza", distance: "0.5 mi", rating: 4.8 },
+    { id: "shop2", name: "Sushi World", distance: "1.2 mi", rating: 4.5 },
+    { id: "shop3", name: "Burger King", distance: "2.0 mi", rating: 4.2 },
+];
+
+/**
+ * Fetch Personalization Data
+ * @param {string} pointName - The personalization point to fetch (e.g., "pronto_home_recs")
+ * @param {object} [payload={}] - Optional context
+ * @returns {Promise<any>}
+ */
+export function getPersonalization(pointName, payload = {}) {
+    return new Promise((resolve) => {
+        console.log(`[WebSDK] Requesting personalization for point: ${pointName}`, payload);
+
+        // 1. Try Real SDK
+        // @ts-ignore
+        if (window.SalesforceInteractions && window.SalesforceInteractions.getPersonalization) {
+            // This is a hypothetical simplified call.
+            // The actual SDK usually uses .sitemap or campaign callbacks.
+            // However, for this modular "fetch" approach, we simulate a direct request if the SDK supported it,
+            // or we just return the mock because we can't easily configure the real campaign in this environment.
+            console.log("[WebSDK] Simulated SDK call. Returning Mock Data for demo.");
+        }
+
+        // 2. Return Mock Data
+        setTimeout(() => {
+            if (pointName === "closest_shops") {
+                resolve(MOCK_SHOPS);
+            } else {
+                resolve(MOCK_RECOMMENDATIONS);
+            }
+        }, 800); // Simulate network latency
+    });
 }

@@ -1,4 +1,9 @@
 <script>
+  /* Layout Components */
+  import RecommendationsSidebar from "./lib/RecommendationsSidebar.svelte";
+  import ClosestShopsSidebar from "./lib/ClosestShopsSidebar.svelte";
+
+  // ... existing imports ...
   import { onMount } from "svelte";
   import Header from "./lib/Header.svelte";
   import Hero from "./lib/Hero.svelte";
@@ -19,6 +24,7 @@
   import CartModal from "./lib/CartModal.svelte";
   import AdminPage from "./lib/AdminPage.svelte";
 
+  // ... existing state ...
   // Modal State
   let isModalOpen = false;
   let initialConsent = "Opt In";
@@ -70,12 +76,6 @@
     const config = event.detail;
     initialConsent = config.initialConsent;
     consent = config.consent;
-
-    // Sync logic: if user changed dropdown, update boolean.
-    // Ideally, the Modal should handle this, but we can enforce it here or just rely on the boolean 'consent'
-    // which is what the toggle controls.
-    // The issue is that 'initialConsent' is just a string and 'consent' is the boolean that drives the logic.
-    // We should probably just use 'consent' for everything or make sure they match.
 
     if (config.cdnScript) {
       cdnScript = config.cdnScript;
@@ -150,6 +150,20 @@
       .then(() => console.log("Category view event sent successfully"))
       .catch((err) => console.error("Failed to send category view event", err));
   }
+
+  // Handler for Sidebar events
+  function handleRecommendationClick(event) {
+    console.log("Recommendation clicked from Sidebar:", event.detail);
+    // Can reuse existing product click handler or do specialized logic
+    handleProductClick(event);
+    // Maybe also add to cart directly or navigate?
+    // For now just logging and treating as a view.
+  }
+
+  function handleShopClick(event) {
+    console.log("Shop clicked:", event.detail);
+    // Example: Set store location context
+  }
 </script>
 
 <div class="app-container">
@@ -159,17 +173,31 @@
     on:logout={handleLogout}
   />
 
-  <main>
-    {#if currentPage === "admin"}
-      <AdminPage />
-    {:else}
-      <Hero on:categoryClick={handleCategoryClick} />
-      <ProductGrid
-        on:productClick={handleProductClick}
-        on:addToCart={handleAddToCart}
-      />
-    {/if}
-  </main>
+  <div class="content-wrapper">
+    <!-- Left Sidebar (Stacked) -->
+    <aside class="sidebar-left">
+      <div class="sidebar-section">
+        <RecommendationsSidebar on:productClick={handleRecommendationClick} />
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ClosestShopsSidebar on:shopClick={handleShopClick} />
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+      {#if currentPage === "admin"}
+        <AdminPage />
+      {:else}
+        <Hero on:categoryClick={handleCategoryClick} />
+        <ProductGrid
+          on:productClick={handleProductClick}
+          on:addToCart={handleAddToCart}
+        />
+      {/if}
+    </main>
+  </div>
 
   <Modal
     bind:isOpen={isModalOpen}
@@ -214,7 +242,7 @@
 
     /* Layout */
     --header-height: 72px;
-    --container-width: 1200px;
+    --container-width: 1400px;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 24px;
@@ -244,13 +272,70 @@
     flex-direction: column;
   }
 
-  main {
-    flex: 1;
+  .content-wrapper {
+    display: grid;
+    /* 2-Column Layout: Sidebar (Fixed) | Content (Flexible) */
+    grid-template-columns: 340px 1fr;
+    gap: 32px;
     width: 100%;
     max-width: var(--container-width);
     margin: 0 auto;
     padding: 24px;
     padding-top: calc(var(--header-height) + 24px);
     box-sizing: border-box;
+    flex: 1;
+  }
+
+  main {
+    min-width: 0; /* Prevents flex/grid blowouts */
+  }
+
+  aside.sidebar-left {
+    /* Sticky Container for the whole rail */
+    height: fit-content;
+    max-height: calc(100vh - var(--header-height) - 48px);
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+    overflow-y: auto; /* Independent scrolling */
+
+    /* Optional: Hide scrollbar for cleaner look */
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  aside.sidebar-left::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  aside.sidebar-left::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 4px;
+  }
+
+  .sidebar-section {
+    /* Each component lives here */
+  }
+
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0 1.5rem;
+  }
+
+  @media (max-width: 1200px) {
+    /* No specific change for 1200px breakpoint in new layout */
+  }
+
+  @media (max-width: 992px) {
+    .content-wrapper {
+      grid-template-columns: 1fr;
+    }
+    aside.sidebar-left {
+      display: none; /* Mobile behavior TBD */
+    }
   }
 </style>

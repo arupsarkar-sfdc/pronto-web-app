@@ -10,7 +10,8 @@
             rating: 4.5,
             time: "25-35 min",
             fee: "$0.49 delivery",
-            image: "🍕",
+            image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500&q=80",
+            isUrl: true,
         },
         {
             id: 2,
@@ -19,7 +20,8 @@
             rating: 4.6,
             time: "20-30 min",
             fee: "$1.49 delivery",
-            image: "🍕",
+            image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=500&q=80",
+            isUrl: true,
         },
         {
             id: 3,
@@ -28,7 +30,8 @@
             rating: 4.3,
             time: "15-25 min",
             fee: "Free delivery",
-            image: "🍔",
+            image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&q=80",
+            isUrl: true,
         },
         {
             id: 4,
@@ -37,7 +40,8 @@
             rating: 4.7,
             time: "30-40 min",
             fee: "$2.99 delivery",
-            image: "🍗",
+            image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500&q=80",
+            isUrl: true,
         },
         {
             id: 5,
@@ -46,7 +50,8 @@
             rating: 4.8,
             time: "25-35 min",
             fee: "$0.99 delivery",
-            image: "🍄",
+            image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80",
+            isUrl: true,
         },
         {
             id: 6,
@@ -55,7 +60,8 @@
             rating: 4.4,
             time: "15-25 min",
             fee: "Free delivery",
-            image: "🥗",
+            image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&q=80",
+            isUrl: true,
         },
     ];
 
@@ -77,7 +83,15 @@
                 on:click={() => handleProductClick(product)}
             >
                 <div class="image-container">
-                    <div class="food-emoji">{product.image}</div>
+                    {#if product.isUrl}
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            class="product-image"
+                        />
+                    {:else}
+                        <div class="food-emoji">{product.image}</div>
+                    {/if}
                     <div class="rating-badge">
                         <span class="star">★</span>
                         <span class="score">{product.rating}</span>
@@ -178,6 +192,17 @@
         font-size: 96px;
         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.1);
     }
 
     .product-card:hover .food-emoji {

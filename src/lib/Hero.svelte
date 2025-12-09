@@ -26,6 +26,7 @@
 <section class="hero-container">
     <!-- Category Pills Navigation -->
     <div class="category-section">
+        <h3 class="section-title">Categories</h3>
         <div class="category-nav">
             {#each categories as category}
                 <button
@@ -61,6 +62,15 @@
 
     .category-section {
         margin-bottom: 32px;
+    }
+
+    .section-title {
+        font-family: "Handlee", cursive; /* Keeping the fun font for headers as originally intended or switching to Inter? User liked Modern, but sketches had Handlee. let's use Inter for consistency with sidebar update, or a nice header font. Using Inter per previous instruction */
+        font-family: "Inter", sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin: 0 0 16px 4px;
+        color: var(--text-primary);
     }
 
     /* Category Navigation */
