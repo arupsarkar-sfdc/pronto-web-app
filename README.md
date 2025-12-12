@@ -37,6 +37,18 @@ git clone <repo>
 npm install
 ```
 
+### Configuration
+
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in the required environment variables in `.env`:
+   *   `TOKEN_ENDPOINT_URL`
+   *   `SALESFORCE_PROXY_URL`
+   *   `SLACK_WEBHOOK_URL`
+
 ### Development
 
 Run the local dev server:
